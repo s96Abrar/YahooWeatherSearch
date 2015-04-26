@@ -1,0 +1,583 @@
+{
+  "1":{
+    "operation":"add",
+    "parameter":"Shawshank Redemption",
+    "output":[
+    ]
+  },
+  "2":{
+    "operation":"add",
+    "parameter":"The Godfather",
+    "output":[
+      "Shawshank Redemption"
+    ]
+  },
+  "3":{
+    "operation":"add",
+    "parameter":"The Godfather: Part II",
+    "output":[
+      "Shawshank Redemption",
+      "The Godfather"
+    ]
+  },
+  "4":{
+    "operation":"add",
+    "parameter":"The Dark Knight",
+    "output":[
+      "The Godfather",
+      "Shawshank Redemption"
+    ]
+  },
+  "5":{
+    "operation":"add",
+    "parameter":"Pulp Fiction",
+    "output":[
+      "The Godfather",
+      "Shawshank Redemption"
+    ]
+  },
+  "6":{
+    "operation":"add",
+    "parameter":"12 Angry Men",
+    "output":[
+      "The Godfather",
+      "Shawshank Redemption",
+      "Pulp Fiction"
+    ]
+  },
+  "7":{
+    "operation":"add",
+    "parameter":"Schindler's List",
+    "output":[
+      "The Godfather",
+      "Shawshank Redemption",
+      "Pulp Fiction"
+    ]
+  },
+  "8":{
+    "operation":"add",
+    "parameter":"The Good the Bad and the Ugly",
+    "output":[
+      "The Godfather",
+      "The Godfather: Part II"
+    ]
+  },
+  "9":{
+    "operation":"add",
+    "parameter":"The Lord of the Rings: The Return of the King",
+    "output":[
+      "The Godfather",
+      "The Godfather: Part II",
+      "The Good the Bad and the Ugly"
+    ]
+  },
+  "10":{
+    "operation":"add",
+    "parameter":"Fight Club",
+    "output":[
+      "The Godfather",
+      "Shawshank Redemption",
+      "Pulp Fiction",
+      "12 Angry Men"
+    ]
+  },
+  "11":{
+    "operation":"add",
+    "parameter":"The Lord of the Rings: The Fellowship of the Ring",
+    "output":[
+      "Shawshank Redemption",
+      "The Godfather",
+      "The Good the Bad and the Ugly",
+      "The Lord of the Rings: The Return of the King"
+    ]
+  },
+  "12":{
+    "operation":"add",
+    "parameter":"Star Wars: Episode V - The Empire Strikes Back",
+    "output":[
+      "Shawshank Redemption",
+      "The Godfather",
+      "The Dark Knight"
+    ]
+  },
+  "13":{
+    "operation":"add",
+    "parameter":"Forrest Gump",
+    "output":[
+      "Shawshank Redemption",
+      "Pulp Fiction",
+      "12 Angry Men",
+      "Fight Club"
+    ]
+  },
+  "14":{
+    "operation":"add",
+    "parameter":"Inception",
+    "output":[
+      "Shawshank Redemption",
+      "Pulp Fiction",
+      "Fight Club",
+      "Forrest Gump"
+    ]
+  },
+  "15":{
+    "operation":"add",
+    "parameter":"One Flew Over the Cuckoo's Nest",
+    "output":[
+      "Shawshank Redemption",
+      "Pulp Fiction",
+      "Fight Club",
+      "Forrest Gump",
+      "Inception"
+    ]
+  },
+  "16":{
+    "operation":"add",
+    "parameter":"The Lord of the Rings: The Two Towers",
+    "output":[
+      "Shawshank Redemption",
+      "The Godfather",
+      "The Good the Bad and the Ugly",
+      "The Lord of the Rings: The Return of the King"
+    ]
+  },
+  "17":{
+    "operation":"add",
+    "parameter":"Goodfellas",
+    "output":[
+      "Shawshank Redemption",
+      "Pulp Fiction",
+      "Fight Club",
+      "Inception",
+      "Forrest Gump"
+    ]
+  },
+  "18":{
+    "operation":"add",
+    "parameter":"The Matrix",
+    "output":[
+      "Shawshank Redemption",
+      "The Godfather",
+      "The Good the Bad and the Ugly",
+      "The Lord of the Rings: The Return of the King",
+      "The Lord of the Rings: The Two Towers"
+    ]
+  },
+  "19":{
+    "operation":"add",
+    "parameter":"Star Wars: Episode IV - A New Hope",
+    "output":[
+      "Shawshank Redemption",
+      "The Good the Bad and the Ugly",
+      "The Godfather",
+      "The Dark Knight",
+      "Star Wars: Episode V - The Empire Strikes Back"
+    ]
+  },
+  "20":{
+    "operation":"add",
+    "parameter":"Seven Samurai",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Pulp Fiction",
+      "Schindler's List"
+    ]
+  },
+  "21":{
+    "operation":"add",
+    "parameter":"Interstellar",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Pulp Fiction",
+      "One Flew Over the Cuckoo's Nest"
+    ]
+  },
+  "22":{
+    "operation":"add",
+    "parameter":"City of God",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Fight Club",
+      "12 Angry Men"
+    ]
+  },
+  "23":{
+    "operation":"add",
+    "parameter":"Se7en",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Pulp Fiction",
+      "Schindler's List",
+      "Seven Samurai"
+    ]
+  },
+  "24":{
+    "operation":"add",
+    "parameter":"The Usual Suspects",
+    "output":[
+      "Shawshank Redemption",
+      "The Good the Bad and the Ugly",
+      "The Lord of the Rings: The Return of the King",
+      "The Lord of the Rings: The Two Towers",
+      "The Matrix"
+    ]
+  },
+  "25":{
+    "operation":"add",
+    "parameter":"The Silence of the Lambs",
+    "output":[
+      "Shawshank Redemption",
+      "The Good the Bad and the Ugly",
+      "The Lord of the Rings: The Return of the King",
+      "The Matrix",
+      "The Usual Suspects"
+    ]
+  },
+  "26":{
+    "operation":"add",
+    "parameter":"It's a Wonderful Life",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Pulp Fiction",
+      "One Flew Over the Cuckoo's Nest",
+      "Interstellar"
+    ]
+  },
+  "27":{
+    "operation":"add",
+    "parameter":"Once Upon a Time in the West",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Pulp Fiction",
+      "It's a Wonderful Life",
+      "One Flew Over the Cuckoo's Nest"
+    ]
+  },
+  "28":{
+    "operation":"add",
+    "parameter":"Leon: The Professional",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Pulp Fiction",
+      "It's a Wonderful Life",
+      "One Flew Over the Cuckoo's Nest",
+      "Once Upon a Time in the West"
+    ]
+  },
+  "29":{
+    "operation":"add",
+    "parameter":"Life Is Beautiful",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Pulp Fiction",
+      "It's a Wonderful Life",
+      "Once Upon a Time in the West",
+      "Leon: The Professional"
+    ]
+  },
+  "30":{
+    "operation":"add",
+    "parameter":"Casablanca",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Fight Club",
+      "12 Angry Men",
+      "City of God"
+    ]
+  },
+  "31":{
+    "operation":"add",
+    "parameter":"Raiders of the Lost Ark",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Once Upon a Time in the West",
+      "Pulp Fiction",
+      "Se7en",
+      "Schindler's List"
+    ]
+  },
+  "32":{
+    "operation":"add",
+    "parameter":"American History X",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Fight Club",
+      "Casablanca",
+      "12 Angry Men"
+    ]
+  },
+  "33":{
+    "operation":"add",
+    "parameter":"Saving Private Ryan",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Once Upon a Time in the West",
+      "Pulp Fiction",
+      "Se7en",
+      "Schindler's List",
+      "Raiders of the Lost Ark"
+    ]
+  },
+  "34":{
+    "operation":"add",
+    "parameter":"City Lights",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Fight Club",
+      "Casablanca",
+      "City of God"
+    ]
+  },
+  "35":{
+    "operation":"add",
+    "parameter":"Spirited Away",
+    "output":[
+      "Shawshank Redemption",
+      "The Good the Bad and the Ugly",
+      "The Godfather",
+      "Star Wars: Episode V - The Empire Strikes Back",
+      "Star Wars: Episode IV - A New Hope"
+    ]
+  },
+  "36":{
+    "operation":"add",
+    "parameter":"Psycho",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Once Upon a Time in the West",
+      "Pulp Fiction",
+      "One Flew Over the Cuckoo's Nest"
+    ]
+  },
+  "37":{
+    "operation":"add",
+    "parameter":"Rear Window",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Once Upon a Time in the West",
+      "Pulp Fiction",
+      "Se7en",
+      "Saving Private Ryan",
+      "Raiders of the Lost Ark"
+    ]
+  },
+  "38":{
+    "operation":"add",
+    "parameter":"Whiplash",
+    "output":[
+      "Shawshank Redemption",
+      "The Good the Bad and the Ugly",
+      "The Lord of the Rings: The Return of the King",
+      "The Matrix",
+      "The Usual Suspects"
+    ]
+  },
+  "39":{
+    "operation":"add",
+    "parameter":"The Intouchables",
+    "output":[
+      "Shawshank Redemption",
+      "The Good the Bad and the Ugly",
+      "The Lord of the Rings: The Return of the King",
+      "The Lord of the Rings: The Fellowship of the Ring"
+    ]
+  },
+  "40":{
+    "operation":"add",
+    "parameter":"Modern Times",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Once Upon a Time in the West",
+      "It's a Wonderful Life",
+      "Leon: The Professional",
+      "Life Is Beautiful"
+    ]
+  },
+  "41":{
+    "operation":"add",
+    "parameter":"Terminator 2: Judgment Day",
+    "output":[
+      "Shawshank Redemption",
+      "The Good the Bad and the Ugly",
+      "The Godfather",
+      "Star Wars: Episode V - The Empire Strikes Back",
+      "The Dark Knight"
+    ]
+  },
+  "42":{
+    "operation":"add",
+    "parameter":"Memento",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Once Upon a Time in the West",
+      "It's a Wonderful Life",
+      "Life Is Beautiful",
+      "Modern Times"
+    ]
+  },
+  "43":{
+    "operation":"add",
+    "parameter":"The Green Mile",
+    "output":[
+      "Shawshank Redemption",
+      "The Good the Bad and the Ugly",
+      "The Lord of the Rings: The Return of the King",
+      "The Lord of the Rings: The Fellowship of the Ring",
+      "The Intouchables"
+    ]
+  },
+  "44":{
+    "operation":"add",
+    "parameter":"The Pianist",
+    "output":[
+      "Shawshank Redemption",
+      "The Good the Bad and the Ugly",
+      "The Lord of the Rings: The Return of the King",
+      "The Matrix",
+      "The Usual Suspects",
+      "The Silence of the Lambs"
+    ]
+  },
+  "45":{
+    "operation":"add",
+    "parameter":"The Departed",
+    "output":[
+      "Shawshank Redemption",
+      "The Good the Bad and the Ugly",
+      "The Godfather",
+      "Star Wars: Episode V - The Empire Strikes Back",
+      "The Dark Knight"
+    ]
+  },
+  "46":{
+    "operation":"add",
+    "parameter":"Apocalypse Now",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Fight Club",
+      "Casablanca",
+      "12 Angry Men",
+      "American History X"
+    ]
+  },
+  "47":{
+    "operation":"add",
+    "parameter":"Sunset Blvd.",
+    "output":[
+      "Shawshank Redemption",
+      "The Good the Bad and the Ugly",
+      "The Godfather",
+      "Star Wars: Episode V - The Empire Strikes Back",
+      "The Dark Knight",
+      "Terminator 2: Judgment Day"
+    ]
+  },
+  "48":{
+    "operation":"add",
+    "parameter":"Gladiator",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Fight Club",
+      "Forrest Gump",
+      "Goodfellas"
+    ]
+  },
+  "49":{
+    "operation":"add",
+    "parameter":"Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Fight Club",
+      "Casablanca",
+      "City of God"
+    ]
+  },
+  "50":{
+    "operation":"add",
+    "parameter":"Back to the Future",
+    "output":[
+      "Shawshank Redemption",
+      "Inception",
+      "Fight Club",
+      "Casablanca",
+      "American History X",
+      "Apocalypse Now"
+    ]
+  },
+  "51":{
+    "operation":"rent",
+    "parameter":"Whiplash",
+    "output":"7"
+  },
+  "52":{
+    "operation":"count",
+    "output":"50"
+  },
+  "53":{
+    "operation":"delete",
+    "parameter":"Whiplash",
+    "output":[
+      "Shawshank Redemption",
+      "The Good the Bad and the Ugly",
+      "The Matrix",
+      "The Usual Suspects",
+      "Whiplash"
+    ]
+  },
+  "54":{
+    "operation":"count",
+    "output":"49"
+  },
+  "55":{
+    "operation":"height",
+    "output":"7"
+  },
+  "56":{
+    "operation":"delete",
+    "parameter":"The Dark Knight",
+    "output":[
+      "Shawshank Redemption",
+      "The Good the Bad and the Ugly",
+      "The Dark Knight"
+    ]
+  },
+  "57":{
+    "operation":"height",
+    "output":"7"
+  },
+  "58":{
+    "operation":"delete",
+    "parameter":"Shawshank Redemption",
+    "output":[
+      "Shawshank Redemption"
+    ]
+  },
+  "59":{
+    "operation":"height",
+    "output":"7"
+  },
+  "60":{
+    "operation":"count",
+    "output":"47"
+  }
+}

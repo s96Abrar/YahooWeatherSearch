@@ -1,0 +1,74 @@
+# depslib dependency file v1.0
+1426750637 source:/home/user/Dropbox/Computer Science/CSCI-2270/Assignment 7/Assignment7/main.cpp
+	<iostream>
+	"MovieTree.h"
+	<fstream>
+	<string>
+	<json/json.h>
+	<stdlib.h>
+	<vector>
+
+1426751661 /home/user/Dropbox/Computer Science/CSCI-2270/Assignment 7/Assignment7/include/MovieTree.h
+	<json/json.h>
+
+1426753318 source:/home/user/Dropbox/Computer Science/CSCI-2270/Assignment 7/Assignment7/src/MovieTree.cpp
+	<iostream>
+	"MovieTree.h"
+	<stdio.h>
+	<stdlib.h>
+
+1426750637 source:/home/rishab/Dropbox/Computer Science/CSCI-2270/Assignment 7/Assignment7/main.cpp
+	<iostream>
+	"MovieTree.h"
+	<fstream>
+	<string>
+	<json/json.h>
+	<stdlib.h>
+	<vector>
+
+1426751661 /home/rishab/Dropbox/Computer Science/CSCI-2270/Assignment 7/Assignment7/include/MovieTree.h
+	<json/json.h>
+
+1426799175 source:/home/rishab/Dropbox/Computer Science/CSCI-2270/Assignment 7/Assignment7/src/MovieTree.cpp
+	<iostream>
+	"MovieTree.h"
+	<stdio.h>
+	<stdlib.h>
+
+1426750637 source:/home/user/Dropbox/Computer Science/CSCI-2270/Final Project/CSCI2270_FinalProject/main.cpp
+	<iostream>
+	"MovieTree.h"
+	<fstream>
+	<string>
+	<json/json.h>
+	<stdlib.h>
+	<vector>
+
+1426751661 /home/user/Dropbox/Computer Science/CSCI-2270/Final Project/CSCI2270_FinalProject/include/MovieTree.h
+	<json/json.h>
+
+1426799175 source:/home/user/Dropbox/Computer Science/CSCI-2270/Final Project/CSCI2270_FinalProject/src/MovieTree.cpp
+	<iostream>
+	"MovieTree.h"
+	<stdio.h>
+	<stdlib.h>
+
+1430050271 source:/home/rishab/Dropbox/Computer Science/CSCI-2270/Final Project/CSCI2270_FinalProject/main.cpp
+	<iostream>
+	"MovieTree.h"
+	<fstream>
+	<string>
+	<json/json.h>
+	<stdlib.h>
+	<vector>
+	<curl/curl.h>
+
+1430044072 /home/rishab/Dropbox/Computer Science/CSCI-2270/Final Project/CSCI2270_FinalProject/include/MovieTree.h
+	<json/json.h>
+
+1430044053 source:/home/rishab/Dropbox/Computer Science/CSCI-2270/Final Project/CSCI2270_FinalProject/src/MovieTree.cpp
+	<iostream>
+	"MovieTree.h"
+	<stdio.h>
+	<stdlib.h>
+
