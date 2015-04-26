@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="Assignment7" />
+		<Option title="YahooWeatherSearch" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
@@ -38,9 +38,9 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="include/MovieTree.h" />
+		<Unit filename="include/WeatherTree.h" />
 		<Unit filename="main.cpp" />
-		<Unit filename="src/MovieTree.cpp" />
+		<Unit filename="src/WeatherTree.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

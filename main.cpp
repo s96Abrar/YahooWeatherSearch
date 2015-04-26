@@ -1,5 +1,5 @@
 #include <iostream>
-#include "MovieTree.h"
+#include "WeatherTree.h"
 #include <fstream>  //allows istream/ostream
 #include <string>
 #include <json/json.h>
@@ -9,7 +9,7 @@
 #include <cstdlib>
 #include <curl/curl.h>
 #include <sstream>
-
+#include <algorithm>
 using namespace std;
 
 struct Movie{
@@ -27,60 +27,20 @@ struct Movie{
         quantity = in_quantity;
     }
 };
-static string readBuffer;
 
-static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
-{
-    ((string*)userp)->append((char*)contents, size * nmemb);
-    return size * nmemb;
-}
 
 void displayMenu();
 int getFileSize(char * fileName);
-void readFileIntoTree(MovieTree * mt, char * fileName);
+void readFileIntoTree(WeatherTree * mt, char * fileName);
 
 int main(int argc, char*argv[])
 {
-    cout<<"Enter city name";
-    string city;
-    getline(cin, city);
-    istringstream cityStream(city);
-    string woeidQuery = "https://query.yahooapis.com/v1/public/yql?q=select%20woeid%20from%20geo.places%20where%20text%3D%22";
-    string token;
-    while(getline(cityStream, token, ' ')){
-        woeidQuery = woeidQuery + token + "%20";
-    }
-    woeidQuery = woeidQuery.substr(0, woeidQuery.length()-3);
-    while(getline(cityStream, token, ',')){
-        woeidQuery = woeidQuery + "%2C%20" + token + "%22&format=json&callback=";
-    }
-    CURL *curl;
-    CURLcode res;
-    string readBuffer;
-    //woeidQuery = string("https://query.yahooapis.com/v1/public/yql?q=select%20woeid%20from%20geo.places%20where%20text%3D%22") + "san" + "%20" + "francisco"  + "%2C%20" + "ca" + "%22&format=json&callback=";
-    curl = curl_easy_init();
-    if(curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, woeidQuery.c_str());
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-        res = curl_easy_perform(curl);
-        curl_easy_cleanup(curl);
-        //cout << readBuffer << std::endl;
-    }
-    json_object* queryResponse = json_tokener_parse(readBuffer.c_str());
-    json_object* queryMain = json_object_object_get(queryResponse, "query"); /*Getting the array if it is a key value pair*/
-    json_object* queryResults = json_object_object_get(queryMain, "results");
-    json_object* queryPlaces = json_object_object_get(queryResults, "place");
-    json_object* queryWoeid = json_object_array_get_idx(queryPlaces, 0);
-    string woeid = json_object_get_string(json_object_object_get(queryWoeid, "woeid"));
-    cout<<woeid;
     int input;
     // Determine the size of the text file.
     //int fileSize = getFileSize(argv[1]);
     //cout << "about to create object\n";
     // Create a new communication network
-    MovieTree *mt = new MovieTree();
-
+    WeatherTree *mt = new WeatherTree();
     // Read each line and add it to tree
     readFileIntoTree(mt, argv[1]);
 
@@ -111,9 +71,7 @@ int main(int argc, char*argv[])
             */
             // Rent a movie
             case 1:
-                cout << "Enter title:" << endl;
-                getline(cin,title);
-                mt->rentMovie(title);
+                mt->newQuery();
                 break;
             // Print the inventory
             case 2:
@@ -195,7 +153,7 @@ int getFileSize(char * fileName)
 }
 
 /* reads file into tree */
-void readFileIntoTree(MovieTree * mt, char * fileName)
+void readFileIntoTree(WeatherTree * mt, char * fileName)
 {
     ifstream in_stream;
     //cout << fileName << endl;

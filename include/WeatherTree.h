@@ -30,21 +30,27 @@ struct MovieNode{
 
 };
 
-class MovieTree
+class WeatherTree
 {
         int opCount;
 
     public:
-        MovieTree();
-        virtual ~MovieTree();
-        void printMovieInventory();
-        int countMovieNodes();
-        void deleteMovieNode(std::string title);
-        void addMovieNode(int ranking, std::string title, int releaseYear, int quantity);
+        WeatherTree();
+        virtual ~WeatherTree();
+        void printMovieInventory();//
+        void printAllWeather();
+        int countMovieNodes();//
+        int countWeatherNode();
+        void deleteMovieNode(std::string title);//
+        void deleteWeatherNode(std::string city);
+        void addMovieNode(int ranking, std::string title, int releaseYear, int quantity);//
+        //void addWeatherNode(int )
         void findMovie(std::string title);
+        void findCity(std::string city);
         void rentMovie(std::string title);
         void isValid();
         int countLongestPath();
+        void newQuery();
         //use this to return the json object from the class when you are ready to write it to a file
         json_object* getJsonObject();
 
@@ -67,6 +73,8 @@ class MovieTree
         MovieNode *root;
         MovieNode *nil;
         void initJson();
+        std::string curlResponse(std::string query);
+        static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
         // Count of how many operations we have done.
         //including the json_object in the class makes it global within the class, much easier to work with
         json_object * Assignment7Output;

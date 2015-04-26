@@ -1,11 +1,13 @@
 #include <iostream>
-#include "MovieTree.h"
+#include "WeatherTree.h"
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <algorithm>
+#include <curl/curl.h>
+#include <sstream>
 using namespace std;
 
-MovieTree::MovieTree()
+WeatherTree::WeatherTree()
 {
     opCount = 1;
     nil = new MovieNode(0, "", 0, 0);
@@ -15,15 +17,66 @@ MovieTree::MovieTree()
     Assignment7Output = json_object_new_object();
 }
 
-MovieTree::~MovieTree()
+WeatherTree::~WeatherTree()
 {
     DeleteAll(root);
 
     // Clean up json object
     json_object_put(Assignment7Output);
 }
+void WeatherTree::newQuery(){
+    cout<<"Enter city name"<<endl;
+    string city;
+    getline(cin, city);
+    transform(city.begin(), city.end(), city.begin(), ::tolower);
+    cout<<"Enter state name"<<endl;
+    string state;
+    getline(cin, state);
+    transform(state.begin(), state.end(), state.begin(), ::tolower);
+    istringstream cityStream(city);
+    string woeidQuery = "https://query.yahooapis.com/v1/public/yql?q=select%20woeid%20from%20geo.places%20where%20text%3D%22";
+    string token;
+    while(getline(cityStream, token, ' ')){
+        woeidQuery = woeidQuery + token + "%20";
+    }
+    woeidQuery = woeidQuery.substr(0, woeidQuery.length()-3);
+    woeidQuery = woeidQuery + "%2C%20" + state + "%22&format=json&callback=";
+    string woeidResponse = curlResponse(woeidQuery);
+    json_object* queryResponse = json_tokener_parse(woeidResponse.c_str());
+    json_object* queryMain = json_object_object_get(queryResponse, "query"); /*Getting the array if it is a key value pair*/
+    if(!json_object_is_type(json_object_object_get(queryMain, "results"), json_type_null)){
+    json_object* queryResults = json_object_object_get(queryMain, "results");
+    json_object* queryPlaces = json_object_object_get(queryResults, "place");
+    json_object* queryWoeid = json_object_array_get_idx(queryPlaces, 0);
+    string woeid = json_object_get_string(json_object_object_get(queryWoeid, "woeid"));
+    string weatherQuery = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D" + woeid + "&format=json&callback=";
+    string weatherResponse = curlResponse(weatherQuery);
+    json_object* query2Response = json_tokener_parse(weatherResponse.c_str());
+    cout<<json_object_to_json_string_ext(query2Response, JSON_C_TO_STRING_PRETTY)<<endl;
 
-int MovieTree::countLongestPath()
+    }
+}
+size_t WeatherTree::WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
+{
+    ((string*)userp)->append((char*)contents, size * nmemb);
+    return size * nmemb;
+}
+
+string WeatherTree::curlResponse(string query){
+    CURL *curl;
+    CURLcode res;
+    string readBuffer;
+    curl = curl_easy_init();
+    if(curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, query.c_str());
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        res = curl_easy_perform(curl);
+        curl_easy_cleanup(curl);
+    }
+    return readBuffer;
+}
+int WeatherTree::countLongestPath()
 {
     json_object * newJSON = json_object_new_object();
     int longestPath = countLongestPath(root);
@@ -35,7 +88,7 @@ int MovieTree::countLongestPath()
     opCount++;
     return longestPath;
 }
-int MovieTree::countLongestPath(MovieNode * node)
+int WeatherTree::countLongestPath(MovieNode * node)
 {
     if (node == nil)
         return 0;
@@ -48,7 +101,7 @@ int MovieTree::countLongestPath(MovieNode * node)
 }
 
 /* Used to delete all nodes in the tree */
-void MovieTree::DeleteAll(MovieNode * node)
+void WeatherTree::DeleteAll(MovieNode * node)
 {
     // clean to the left
     if (node->leftChild != nil)
@@ -62,13 +115,13 @@ void MovieTree::DeleteAll(MovieNode * node)
     return;
 }
 
-void MovieTree::initJson()
+void WeatherTree::initJson()
 {
     Assignment7Output = json_object_new_object();
 }
 
 /* Helper for the printMovieInventory recursive function */
-void MovieTree::printMovieInventory()
+void WeatherTree::printMovieInventory()
 {
     // Create the json object for this operation
     json_object * newJSON = json_object_new_object();
@@ -88,7 +141,7 @@ void MovieTree::printMovieInventory()
 }
 
 /* Prints the inventory(in order traversal) */
-void MovieTree::printMovieInventory(MovieNode * node, json_object * traverseLog)
+void WeatherTree::printMovieInventory(MovieNode * node, json_object * traverseLog)
 {
 
     // Left Node
@@ -110,7 +163,7 @@ void MovieTree::printMovieInventory(MovieNode * node, json_object * traverseLog)
 }
 
 
-void MovieTree::addMovieNode(int ranking, std::string title, int releaseYear, int quantity)
+void WeatherTree::addMovieNode(int ranking, std::string title, int releaseYear, int quantity)
 {
     //cout << "entered!\n";
     // Create the json object for this operation
@@ -173,7 +226,7 @@ void MovieTree::addMovieNode(int ranking, std::string title, int releaseYear, in
     return;
 
 }
-void MovieTree::rbInsertFix(MovieNode* x){
+void WeatherTree::rbInsertFix(MovieNode* x){
             x->leftChild = nil;
             x->rightChild = nil;
             MovieNode* y = NULL;
@@ -219,7 +272,7 @@ void MovieTree::rbInsertFix(MovieNode* x){
         root->isRed = false;
 }
 
-void MovieTree::findMovie(std::string title)
+void WeatherTree::findMovie(std::string title)
 {
     // Create a traversal log
     json_object * travLog = json_object_new_array();
@@ -240,7 +293,7 @@ void MovieTree::findMovie(std::string title)
     return;
 }
 
-MovieNode* MovieTree::searchMovieTree(MovieNode * node, std::string title, json_object * traverseLog)
+MovieNode* WeatherTree::searchMovieTree(MovieNode * node, std::string title, json_object * traverseLog)
 {
     // Add the current node to the traverse log
     if (node != nil)
@@ -267,7 +320,7 @@ MovieNode* MovieTree::searchMovieTree(MovieNode * node, std::string title, json_
     }
 }
 
-void MovieTree::rentMovie(std::string title)
+void WeatherTree::rentMovie(std::string title)
 {
     // Create the json object for this operation
     json_object * newJSON = json_object_new_object();
@@ -321,7 +374,7 @@ void MovieTree::rentMovie(std::string title)
 
 }
 
-void MovieTree::deleteMovieNode(std::string title)
+void WeatherTree::deleteMovieNode(std::string title)
 {
 
     // Create the json object for this operation
@@ -350,7 +403,7 @@ void MovieTree::deleteMovieNode(std::string title)
 
 
 }
-void MovieTree::rbTransplant(MovieNode * u, MovieNode * v)
+void WeatherTree::rbTransplant(MovieNode * u, MovieNode * v)
 {
     if (u->parent == nil)
         root = v;
@@ -363,7 +416,7 @@ void MovieTree::rbTransplant(MovieNode * u, MovieNode * v)
 
 }
 
-void MovieTree::rbDelete(MovieNode * z)
+void WeatherTree::rbDelete(MovieNode * z)
 {
     MovieNode * y = z;
     bool yOriginalColor = y->isRed;
@@ -401,7 +454,7 @@ void MovieTree::rbDelete(MovieNode * z)
 
 }
 
-void MovieTree::rbDeleteFixup(MovieNode *x)
+void WeatherTree::rbDeleteFixup(MovieNode *x)
 {
     MovieNode * w = NULL;
     while ((x != root) && (x->isRed == false)){
@@ -463,7 +516,7 @@ void MovieTree::rbDeleteFixup(MovieNode *x)
     isValid();
 }
 
-int MovieTree::countMovieNodes()
+int WeatherTree::countMovieNodes()
 {
     // Create the json object for this operation
     json_object * newJSON = json_object_new_object();
@@ -482,18 +535,18 @@ int MovieTree::countMovieNodes()
     return count;
 }
 
-int MovieTree::countMovieNodes(MovieNode *node)
+int WeatherTree::countMovieNodes(MovieNode *node)
 {
     if (node == nil)
         return 0;
     return countMovieNodes(node->leftChild) + countMovieNodes(node->rightChild) + 1;
 }
 
-json_object* MovieTree::getJsonObject()
+json_object* WeatherTree::getJsonObject()
 {
     return Assignment7Output;
 }
-int MovieTree::rbValid(MovieNode * node)
+int WeatherTree::rbValid(MovieNode * node)
 {
     int lh = 0;
     int rh = 0;
@@ -546,7 +599,7 @@ int MovieTree::rbValid(MovieNode * node)
     }
 }
 
-void MovieTree::leftRotate(MovieNode *x){
+void WeatherTree::leftRotate(MovieNode *x){
     MovieNode * y = x->rightChild;
     x->rightChild = y->leftChild;
     if ( y->leftChild != nil)
@@ -566,7 +619,7 @@ void MovieTree::leftRotate(MovieNode *x){
    x->parent = y;
 }
 
-void MovieTree::rightRotate(MovieNode *x){
+void WeatherTree::rightRotate(MovieNode *x){
     MovieNode * y = x->leftChild;
     x->leftChild = y->rightChild;
     if ( y->rightChild != nil )
@@ -585,6 +638,6 @@ void MovieTree::rightRotate(MovieNode *x){
    y->rightChild = x;
    x->parent = y;
 }
-void MovieTree::isValid(){
+void WeatherTree::isValid(){
     cout<<rbValid(root);
 }
