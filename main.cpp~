@@ -105,6 +105,14 @@ int main(int argc, char*argv[])
                 break;
         }
     }
+
+    // Write our JSON object to a file
+    ofstream myfile;
+    myfile.open("Weather.txt");
+    myfile << json_object_to_json_string_ext(mt->getJsonObject(), JSON_C_TO_STRING_PRETTY);
+    myfile.close();
+
+
     // Free memory and return
     delete mt;
 
