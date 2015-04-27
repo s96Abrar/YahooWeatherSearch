@@ -7,33 +7,63 @@
 #include <sstream>
 #include <fstream>
 using namespace std;
+/*
+Function prototype:
+WeatherTree:WeatherTree()
 
-WeatherTree::WeatherTree()
-{
+Function description:
+This is the only constructor for the WeatherTree class, pretty much all it does is setup the Sentinel(nil) node
+
+Example:
+wt = new WeatherTree()
+*/
+WeatherTree::WeatherTree(){
     nil = new WeatherNode("","","","","","");
     root = nil;
     nil->isRed = false;
     nil->leftChild = nil->rightChild = nil;
 }
-
+/*
+Function prototype:
 WeatherTree::~WeatherTree()
-{
+
+Function description:
+This method is the only destructor for the class, it clears all memory that is allocated for the class
+
+Example:
+WeatherTree* wt;
+delete wt;
+Post condition: all the nodes will be deleted from chain and memory freed. All memory allocated for the tree will be freed.
+*/
+WeatherTree::~WeatherTree(){
+    //Recursive function that deletes all nodes
     DeleteAll(root);
 }
-/* reads file into tree */
+/*
+Function prototype:
 void WeatherTree::readFileIntoTree(string fileName)
-{
+
+Function description:
+This method reads locations from a file, checks the weather at those locations from the Yahoo weather API and adds the data to the tree.
+
+Example:
+WeatherTree* wt;
+wt.readFileIntoTree("locations.txt")
+
+Precondition: The filename passed to the function must be valid,otherwise the function will give an error saying that the file cannot be opened
+and will not add anything to the tree. The locations in the file must also be valid otherwise no data will be found and nothing added to the tree
+Post condition: The movie nodes from the file will be added to the tree and the tree will balance itself accordingly.
+*/
+void WeatherTree::readFileIntoTree(string fileName){
     ifstream in_stream;
     in_stream.open(fileName);
-    if (!in_stream)
-    {
+    if (!in_stream){
         cout << "Could not open file\n";
         return;
     }
     string city;
     string state;
-    while (!in_stream.eof())
-    {
+    while (!in_stream.eof()){
         city = "";
         state = "";
         getline(in_stream, city, ',');
@@ -52,16 +82,37 @@ void WeatherTree::readFileIntoTree(string fileName)
     }
 
 }
+/*
+Function prototype:
+void WeatherTree::printAllWeather()
+
+Function description:
+This method prints out the weather at all the locations in the tree
+
+Example:
+WeatherTree* wt;
+wt.printAllWeather()
+
+Precondition: The tree must be have at least one element in it otherwise it will print "Nothing to show"
+*/
 void WeatherTree::printAllWeather(){
     if(root != nil)
         printAllWeather(root);
     else
         cout<<"Nothing to show"<<endl;
 }
+/*
+Function prototype:
+void WeatherTree::printAllWeather(WeatherNode* node)
 
-void WeatherTree::printAllWeather(WeatherNode * node)
-{
-    // Left Node
+Function description:
+This method is a recursive function that prints the weather at nodes that it traverses using in -order traversal
+
+Example:
+This function is automatically called from the public method printAllWeather()
+*/
+void WeatherTree::printAllWeather(WeatherNode * node){
+    // Left Node.
     if(node->leftChild!=nil)
         printAllWeather(node->leftChild);
     // Value
@@ -73,7 +124,21 @@ void WeatherTree::printAllWeather(WeatherNode * node)
 
     return;
 }
+/*
+Function prototype:
+void WeatherTree::newQuery(string city, string state, bool addToTree)
 
+Function description:
+This method queries the Yahoo Weather API and depending on the arguments adds or does not add it to the tree
+
+Example:
+WeatherTree* wt;
+wt.newQuery(city, state, true)//If the details should be added to the tree
+wt.newQuery(city, state, false)//If the details should NOT be added to the tree
+
+Precondition: The tree must be initialized
+Post condition: The function will print the weather details for the entered location and depending on the arguments add it or not add it to the tree
+*/
 void WeatherTree::newQuery(string city, string state, bool addToTree){
     cout<<"Loading weather data..."<<endl;
     transform(city.begin(), city.end(), city.begin(), ::tolower);
@@ -143,18 +208,23 @@ void WeatherTree::newQuery(string city, string state, bool addToTree){
         cout<<"Unable to find any results please try again"<<endl;
     }
 }
-size_t WeatherTree::WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
-{
-    ((string*)userp)->append((char*)contents, size * nmemb);
-    return size * nmemb;
-}
+/*
+Function prototype:
+string WeatherTree::curlResponse(string query)
 
+Function description:
+This method gets a response from the Yahoo Weather API using the cURL library function calls and returns it as a string
+
+Example:
+This functions is automatically called from public method newQuery()
+
+*/
 string WeatherTree::curlResponse(string query){
     CURL *curl;
     CURLcode res;
     string readBuffer;
     curl = curl_easy_init();
-    if(curl) {
+    if(curl){
         curl_easy_setopt(curl, CURLOPT_URL, query.c_str());
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
@@ -163,14 +233,49 @@ string WeatherTree::curlResponse(string query){
     }
     return readBuffer;
 }
+/*
+Function prototype:
+size_t WeatherTree::WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 
+Function description:
+This method gets the size of the curl query
+
+Example:
+This function is automatically called by the method curlResponse
+*/
+
+size_t WeatherTree::WriteCallback(void *contents, size_t size, size_t nmemb, void *userp){
+    ((string*)userp)->append((char*)contents, size * nmemb);
+    return size * nmemb;
+}
+/*
+Function prototype:
 int WeatherTree::countLongestPath()
-{
+
+Function description:
+This method counts the longest path in the tree
+
+Example:
+WeatherTree* wt;
+wt.countLongestPath()
+
+*/
+int WeatherTree::countLongestPath(){
     int longestPath = countLongestPath(root);
     return longestPath;
 }
-int WeatherTree::countLongestPath(WeatherNode * node)
-{
+/*
+Function prototype:
+int WeatherTree::countLongestPath(WeatherNode* node)
+
+Function description:
+This method is a recursive implementation that counts the longest path in a tree
+
+Example:
+This function is automatically called from the public method countLongestPath()
+
+*/
+int WeatherTree::countLongestPath(WeatherNode * node){
     if (node == nil)
         return 0;
     int longestRightPath = countLongestPath(node->rightChild);
@@ -181,24 +286,41 @@ int WeatherTree::countLongestPath(WeatherNode * node)
         return longestRightPath+1;
 }
 
-/* Used to delete all nodes in the tree */
+/*
+Function prototype:
 void WeatherTree::DeleteAll(WeatherNode * node)
-{
-    // clean to the left
+
+Function description:
+A recursive function that deletes all nodes using post order traversal
+
+Example:
+This function is automatically called in the class destructor
+
+Precondition: The tree must be initialized
+Post condition: The function will delete all the nodes in the tree and free memory allocated by calling it
+*/
+void WeatherTree::DeleteAll(WeatherNode * node){
     if (node->leftChild != nil)
         DeleteAll(node->leftChild);
-    // clean to the right
     if (node->rightChild != nil)
         DeleteAll(node->rightChild);
-    // delete this node
     delete node;
-
     return;
 }
 
-/* Helper for the printMovieInventory recursive function */
+/*
+Function prototype:
 void WeatherTree::printSavedLocations()
-{
+
+Function description:
+This method prints out all the locations that are saved in the tree
+
+Example:
+WeatherTree* wt;
+wt.printSavedLocations()
+
+*/
+void WeatherTree::printSavedLocations(){
     if(root != nil){
          cout<<"Your current saved locations are: "<<endl;
         printSavedLocations(root);
@@ -208,70 +330,79 @@ void WeatherTree::printSavedLocations()
     return;
 }
 
-/* Prints the inventory(in order traversal) */
-void WeatherTree::printSavedLocations(WeatherNode * node)
-{
-    // Left Node
+/*
+Function prototype:
+void WeatherTree::printAllWeather()
+
+Function description:
+This recursive functions prints out all the locations that are saved in the tree
+
+Example:
+Automatically called by the public method printSavedLocations()
+
+*/
+void WeatherTree::printSavedLocations(WeatherNode * node){
     if(node->leftChild!=nil)
         printSavedLocations(node->leftChild);
-    // Value
     cout<<node->name<< endl;
-    // Right Node
     if(node->rightChild!=nil)
         printSavedLocations(node->rightChild);
-
     return;
 }
-
-
-
+/*
+Function prototype:
 void WeatherTree::addWeatherNode(string name, string date, string current, string currentConditions, string high, string low)
-{
-    // Create the node we will be inserting
+
+Function description:
+This function adds a node to the Red Black Tree
+
+Example:
+WeatherTree* wt;
+wt->addWeatherNode(name, date, current, currentConditions, high, low)
+
+Precondition: The tree must be initialized
+Post condition: The function will add the node to the tree
+*/
+void WeatherTree::addWeatherNode(string name, string date, string current, string currentConditions, string high, string low){
     WeatherNode * newMovie = new WeatherNode(name, date,current, currentConditions, high, low);
     newMovie->leftChild = nil;
     newMovie->rightChild = nil;
     WeatherNode * x = root;
     WeatherNode * y = nil;
-
-    // Do we have an empty tree?
     if (root == nil){
         root = newMovie;
         root->parent = nil;
     }
-
-    // If the tree is not empty
-    else
-    {
-
-        // Get to the end of the tree, where we need to add this node.
-        while (x != nil)
-        {
-            // Add the current node to the traversal log before moving to next
+    else{
+        while (x != nil){
             y = x;
             if(newMovie->name.compare(x->name) < 0)
                 x = x->leftChild;
             else
                 x = x->rightChild;
-
         }
-
-        // set the parent of this node to be the previous node.
         newMovie->parent = y;
-
-        // Determine which child to this previous node we are at.
         if (newMovie->name.compare(y->name) < 0)
             y->leftChild = newMovie;
         else
             y->rightChild = newMovie;
-
     }
     rbInsertFix(newMovie);
-    //isValid();
     return;
-
 }
+/*
+Function prototype:
+void WeatherTree::rbInsertFix(WeatherNode* x)
 
+Function description:
+A helper function to balance the tree and make sure that it is matches the red black tree requirements
+
+Example:
+Automatically called by the public method addWeatherNode
+
+Precondition: The tree will have Red Black Violations
+Post condition: The tree will be balanced
+*/
 void WeatherTree::rbInsertFix(WeatherNode* x){
             x->leftChild = nil;
             x->rightChild = nil;
@@ -317,13 +448,22 @@ void WeatherTree::rbInsertFix(WeatherNode* x){
         }
         root->isRed = false;
 }
-
+/*
+Function prototype:
 void WeatherTree::findCity(std::string title)
-{
-    // Find the movie
+
+Function description:
+A function that finds a city in the tree and prints it saved weather details
+
+Example:
+WeatherTree* wt;
+wt->findCity(city)
+
+Precondition: The tree must be initialized
+*/
+void WeatherTree::findCity(std::string title){
     WeatherNode * foundCity = searchMovieTree(root,title);
-    if (foundCity != nil)
-    {
+    if (foundCity != nil){
         cout<<"Weather forecast for : "<<foundCity->name<<endl;
         cout<<"Date & Time: "<<foundCity->date<<endl;
         cout<<"Current Temperature: "<<foundCity->current<<endl;
@@ -338,19 +478,24 @@ void WeatherTree::findCity(std::string title)
         }
     return;
 }
-
+/*
+Function prototype:
 WeatherNode* WeatherTree::searchMovieTree(WeatherNode * node, std::string title)
-{
-    // If the node is NULL, we just return. Failed to find node.
+
+Function description:
+A recursive function that finds a place in the tree and returns a pointer to it
+
+Example:
+The function is automatically called by the public method findCity
+
+Precondition: The tree must be initialized
+*/
+WeatherNode* WeatherTree::searchMovieTree(WeatherNode * node, std::string title){
     if (node == nil)
         return nil;
-    // Return this node if it is the one we are searching for
     else if (node->name == title)
         return node;
-
-    // Else return the correct recursive call.
-    else
-    {
+    else{
         if(title.compare(node->name) < 0)
             return searchMovieTree(node->leftChild,title);
 
@@ -358,42 +503,44 @@ WeatherNode* WeatherTree::searchMovieTree(WeatherNode * node, std::string title)
             return searchMovieTree(node->rightChild,title);
     }
 }
-
+/*
+Function prototype:
 void WeatherTree::deleteWeatherNode(std::string title)
-{
 
+Function description:
+A function that deletes a node using its title
+
+Example:
+WeatherTree* wt
+wt->deleteWeatherNode(city)
+
+Precondition: The tree must be initialized and the node must be in the tree
+Post condition: The node will be deleted from the tree if its is found
+*/
+void WeatherTree::deleteWeatherNode(std::string title){
     WeatherNode * foundMovie = searchMovieTree(root,title);
-
-    // If the movie exists
     if (foundMovie != nil)
-    {
         rbDelete(foundMovie);
-    }
-    // If it doesn't exist
     else{
         cout << "City not found in saved locations" << endl;
         cout << "Search with the format city(region if any), country" << endl;
         cout << "If you still can't find it, it's probably not in your saved locations" << endl;
     }
-
-
-
-
 }
-void WeatherTree::rbTransplant(WeatherNode * u, WeatherNode * v)
-{
-    if (u->parent == nil)
-        root = v;
-    else if (u == u->parent->leftChild)
-        u->parent->leftChild = v;
-    else
-        u->parent->rightChild = v;
-    v->parent = u->parent;
-
-}
-
+/*
+Function prototype:
 void WeatherTree::rbDelete(WeatherNode * z)
-{
+
+Function description:
+This functions implements the delete from the tree given a pointer to the locations of the node. It also makes sure that the tree is balanced after
+
+Example:
+Automatically called by the public method deleteWeatherNode
+
+Precondition: The pointer passed must be valid, this functions does not check for the validity of the input
+Post condition: The node is deleted and the tree is rebalanced
+*/
+void WeatherTree::rbDelete(WeatherNode * z){
     WeatherNode * y = z;
     bool yOriginalColor = y->isRed;
     WeatherNode * x = nil;
@@ -407,9 +554,8 @@ void WeatherTree::rbDelete(WeatherNode * z)
     }
     else{
             y = z->rightChild;
-            while (y->leftChild != nil){
+            while (y->leftChild != nil)
                 y = y->leftChild ;
-            }
             yOriginalColor = y->isRed;
             x = y->rightChild;
             if (y->parent == z)
@@ -427,11 +573,43 @@ void WeatherTree::rbDelete(WeatherNode * z)
     delete z;
     if (yOriginalColor == false)
         rbDeleteFixup(x);
+}
+/*
+Function prototype:
+void WeatherTree::deleteWeatherNode(std::string title)
+
+Function description:
+A function that deletes a node using its title
+
+Example:
+Automatically called by rbDelete
+
+Post condition: The node will be transplanted
+*/
+void WeatherTree::rbTransplant(WeatherNode * u, WeatherNode * v){
+    if (u->parent == nil)
+        root = v;
+    else if (u == u->parent->leftChild)
+        u->parent->leftChild = v;
+    else
+        u->parent->rightChild = v;
+    v->parent = u->parent;
 
 }
-
+/*
+Function prototype:
 void WeatherTree::rbDeleteFixup(WeatherNode *x)
-{
+
+Function description:
+This functions does the fixup for the rbDelete functions
+
+Example:
+Automatically called by rbDelete
+
+Precondition: The pointer passed must be valid, this functions does not check for the validity of the input
+Post condition: The tree is rebalanced
+*/
+void WeatherTree::rbDeleteFixup(WeatherNode *x){
     WeatherNode * w = NULL;
     while ((x != root) && (x->isRed == false)){
         if (x == x->parent->leftChild){
@@ -492,73 +670,49 @@ void WeatherTree::rbDeleteFixup(WeatherNode *x)
     isValid();
 }
 
+/*
+Function prototype:
 int WeatherTree::countWeatherNodes()
-{
-    // Determine the count
+
+Function description:
+This function counts the number of nodes in the tree
+
+Example:
+WeatherTree* wt
+wt->countWeatherNodes()
+
+*/
+int WeatherTree::countWeatherNodes(){
     int count = countWeatherNodes(root);
     return count;
 }
-
+/*
+Function prototype:
 int WeatherTree::countWeatherNodes(WeatherNode *node)
-{
+
+Function description:
+This function is a recursive function that counts the nodes in a tree
+
+Example:
+WeatherTree* wt
+wt->countWeatherNodes()
+
+*/
+int WeatherTree::countWeatherNodes(WeatherNode *node){
     if (node == nil)
         return 0;
     return countWeatherNodes(node->leftChild) + countWeatherNodes(node->rightChild) + 1;
 }
+/*
+Function prototype:
+void WeatherTree::leftRotate(WeatherNode *x)
 
-int WeatherTree::rbValid(WeatherNode * node)
-{
-    int lh = 0;
-    int rh = 0;
+Function description:
+This function checks performs a left rotate on the tree
 
-    // If we are at a nil node just return 1
-    if (node == nil)
-        return 1;
-
-    else
-    {
-        // First check for consecutive red links.
-        if (node->isRed)
-        {
-            if(node->leftChild->isRed || node->rightChild->isRed)
-            {
-                cout << "This tree contains a red violation" << endl;
-                return 0;
-            }
-        }
-
-        // Check for valid binary search tree.
-        if ((node->leftChild != nil && node->leftChild->name.compare(node->name) > 0) || (node->rightChild != nil && node->rightChild->name.compare(node->name) < 0))
-        {
-            cout << "This tree contains a binary tree violation" << endl;
-            return 0;
-        }
-
-        // Deteremine the height of let and right children.
-        lh = rbValid(node->leftChild);
-        rh = rbValid(node->rightChild);
-
-        // black height mismatch
-        if (lh != 0 && rh != 0 && lh != rh)
-        {
-            cout << "This tree contains a black height violation" << endl;
-            return 0;
-        }
-
-        // If neither height is zero, incrament if it if black.
-        if (lh != 0 && rh != 0)
-        {
-                if (node->isRed)
-                    return lh;
-                else
-                    return lh+1;
-        }
-
-        else
-            return 0;
-    }
-}
-
+Example:
+Called automatically by many functions
+*/
 void WeatherTree::leftRotate(WeatherNode *x){
     WeatherNode * y = x->rightChild;
     x->rightChild = y->leftChild;
@@ -578,7 +732,16 @@ void WeatherTree::leftRotate(WeatherNode *x){
    y->leftChild = x;
    x->parent = y;
 }
+/*
+Function prototype:
+void WeatherTree::rightRotate(WeatherNode *x)
 
+Function description:
+This function checks performs a right rotate on the tree
+
+Example:
+Called automatically by many functions
+*/
 void WeatherTree::rightRotate(WeatherNode *x){
     WeatherNode * y = x->leftChild;
     x->leftChild = y->rightChild;
@@ -598,6 +761,60 @@ void WeatherTree::rightRotate(WeatherNode *x){
    y->rightChild = x;
    x->parent = y;
 }
+/*
+Function prototype:
+int WeatherTree::rbValid(WeatherNode * node)
+
+Function description:
+This function checks if there are any red black tree violations in the tree.
+
+Example:
+WeatherTree* wt
+wt->rbValid
+*/
 void WeatherTree::isValid(){
     cout<<rbValid(root);
+}
+/*
+Function prototype:
+int WeatherTree::rbValid(WeatherNode * node)
+
+Function description:
+This function checks if there are any red black tree violations in the tree.
+
+Example:
+Called automatically by the public method isValid()
+*/
+int WeatherTree::rbValid(WeatherNode * node){
+    int lh = 0;
+    int rh = 0;
+    if (node == nil)
+        return 1;
+
+    else{
+        if (node->isRed){
+            if(node->leftChild->isRed || node->rightChild->isRed){
+                cout << "This tree contains a red violation" << endl;
+                return 0;
+            }
+        }
+        if ((node->leftChild != nil && node->leftChild->name.compare(node->name) > 0) || (node->rightChild != nil && node->rightChild->name.compare(node->name) < 0)){
+            cout << "This tree contains a binary tree violation" << endl;
+            return 0;
+        }
+        lh = rbValid(node->leftChild);
+        rh = rbValid(node->rightChild);
+        if (lh != 0 && rh != 0 && lh != rh){
+            cout << "This tree contains a black height violation" << endl;
+            return 0;
+        }
+        if (lh != 0 && rh != 0){
+                if (node->isRed)
+                    return lh;
+                else
+                    return lh+1;
+        }
+        else
+            return 0;
+    }
 }
