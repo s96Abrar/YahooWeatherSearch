@@ -35,7 +35,7 @@ class WeatherTree
     public:
         WeatherTree();
         virtual ~WeatherTree();
-        void printSavedLocations();//
+        void printSavedLocations();
         void printAllWeather();
         int countWeatherNodes();
         void deleteWeatherNode(std::string city);
@@ -50,9 +50,9 @@ class WeatherTree
     protected:
 
     private:
-        void DeleteAll(WeatherNode * node); //use this for the post-order traversal deletion of the tree
+        void DeleteAll(WeatherNode * node);
         void printSavedLocations(WeatherNode * node);
-        void rbAddFixup(WeatherNode * node); // called after insert to fix tree
+        void rbAddFixup(WeatherNode * node);
         void leftRotate(WeatherNode * x);
         void rbDelete(WeatherNode * x);
         void rightRotate(WeatherNode * x);
@@ -68,11 +68,6 @@ class WeatherTree
         std::string curlResponse(std::string query);
         static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
         void printAllWeather(WeatherNode* node);
-        // Count of how many operations we have done.
-        //including the json_object in the class makes it global within the class, much easier to work with
-
-
-
 };
 
 #endif // MOVIETREE_H
