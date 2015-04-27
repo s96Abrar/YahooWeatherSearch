@@ -1,6 +1,6 @@
 #include <iostream>
 #include "WeatherTree.h"
-#include <fstream>  //allows istream/ostream
+#include <fstream>
 #include <string>
 #include <json/json.h>
 #include <stdlib.h>
@@ -34,42 +34,38 @@ int getFileSize(char * fileName);
 
 int main(int argc, char*argv[])
 {
+    // Create an instance of the WeatherTree class
+    WeatherTree *weatherData = new WeatherTree();
+    // Reads the file that was given to it as a command line argument and adds it to the tree
+    weatherData->readFileIntoTree(string(argv[1]));
+    // Flag used for exiting menu
+    bool quit = false;
+    // Used for input
+    string title;
     int input;
     string city;
     string state;
-    // Determine the size of the text file.
-    //int fileSize = getFileSize(argv[1]);
-    //cout << "about to create object\n";
-    // Create a new communication network
-    WeatherTree *weatherData = new WeatherTree();
-    // Read each line and add it to tree
-    weatherData->readFileIntoTree(string(argv[1]));
-
-    // Flag used for exiting menu
-    bool quit = false;
-
-    // Used for input
-    string title;
-
     while(quit != true)
     {
         displayMenu();
         cin >> input;
-
         //clear out cin
         cin.clear();
         cin.ignore(10000,'\n');
 
         switch (input)
         {
+            //Add places form file to saved locations
             case 1:
                 cout << "Enter file name(including the extension like .txt):" << endl;
                 getline(cin,title);
                 weatherData->readFileIntoTree(title);
                 break;
+            //Print all locally stored weather data
             case 2:
                 weatherData->printAllWeather();
                 break;
+            //Search the Yahoo API for the weather information of a location
             case 3:
                 cout<<"Enter city name"<<endl;
                 getline(cin, city);
@@ -77,12 +73,13 @@ int main(int argc, char*argv[])
                 getline(cin, state);
                 weatherData->newQuery(city, state, false);
                 break;
-            // Print the inventory
+            // Find and print the data of a saved location
             case 4:
                 cout << "Enter city name:" << endl;
                 getline(cin,title);
                 weatherData->findCity(title);
                 break;
+            //Search the Yahoo API for weather information of a location and add it to the tree
             case 5:
                 cout<<"Enter city name"<<endl;
                 getline(cin, city);
@@ -90,25 +87,26 @@ int main(int argc, char*argv[])
                 getline(cin, state);
                 weatherData->newQuery(city, state, true);
                 break;
-            // Delete Node
+            // Delete a Node
             case 6:
                 cout << "Enter city name:" << endl;
                 getline(cin,title);
                 weatherData->deleteWeatherNode(title);
                 break;
-            // Count Tree
+            // Count Tree size
             case 7:
                 cout << "The number of saved cities is " << weatherData->countWeatherNodes() << endl;
                 break;
-            // Quit
+            // Print all names of all the saved locations
             case 8:
                 weatherData->printSavedLocations();
                 break;
+            //Quit the program
             case 9:
                 cout << "Goodbye!" << endl;
                 quit = true;
                 break;
-            // invalid input
+            // Incase of invalid input
             default:
                 cout << "Invalid Input" << endl;
                 cin.clear();
@@ -138,25 +136,4 @@ void displayMenu()
     cout << "9. Quit"<<endl;
     return;
 }
-
-/*grabs the number of words in a file */
-int getFileSize(char * fileName)
-{
-    ifstream in_stream;
-    in_stream.open(fileName);
-    int count = 0;
-    string word;
-
-    while (!in_stream.eof())
-    {
-        getline(in_stream,word);
-        count++;
-    }
-
-    in_stream.close();
-
-    return count;
-}
-
-
 
