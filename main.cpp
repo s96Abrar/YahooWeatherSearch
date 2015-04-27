@@ -41,9 +41,9 @@ int main(int argc, char*argv[])
     //int fileSize = getFileSize(argv[1]);
     //cout << "about to create object\n";
     // Create a new communication network
-    WeatherTree *mt = new WeatherTree();
+    WeatherTree *weatherData = new WeatherTree();
     // Read each line and add it to tree
-    mt->readFileIntoTree(string(argv[1]));
+    weatherData->readFileIntoTree(string(argv[1]));
 
     // Flag used for exiting menu
     bool quit = false;
@@ -62,57 +62,47 @@ int main(int argc, char*argv[])
 
         switch (input)
         {
-            // Find a movie
-            /*
-            case 1:
-                cout << "Enter title:" << endl;
-                getline(cin,title);
-                mt->findMovie(title);
-                break;
-            */
-            // Rent a movie
             case 1:
                 cout << "Enter file name(including the extension like .txt):" << endl;
                 getline(cin,title);
-                mt->readFileIntoTree(title);
+                weatherData->readFileIntoTree(title);
                 break;
             case 2:
-                mt->printAllWeather();
+                weatherData->printAllWeather();
                 break;
             case 3:
                 cout<<"Enter city name"<<endl;
                 getline(cin, city);
                 cout<<"Enter state/country name"<<endl;
                 getline(cin, state);
-                mt->newQuery(city, state, false);
+                weatherData->newQuery(city, state, false);
                 break;
             // Print the inventory
             case 4:
                 cout << "Enter city name:" << endl;
                 getline(cin,title);
-                mt->findCity(title);
+                weatherData->findCity(title);
                 break;
             case 5:
                 cout<<"Enter city name"<<endl;
                 getline(cin, city);
                 cout<<"Enter state/country name"<<endl;
                 getline(cin, state);
-                mt->newQuery(city, state, true);
+                weatherData->newQuery(city, state, true);
                 break;
             // Delete Node
             case 6:
                 cout << "Enter city name:" << endl;
                 getline(cin,title);
-                mt->deleteWeatherNode(title);
+                weatherData->deleteWeatherNode(title);
                 break;
             // Count Tree
             case 7:
-                cout << "The number of saved cities is " << mt->countWeatherNodes() << endl;
+                cout << "The number of saved cities is " << weatherData->countWeatherNodes() << endl;
                 break;
             // Quit
             case 8:
-                cout<<"Your current saved locations are: "<<endl;
-                mt->printSavedLocations();
+                weatherData->printSavedLocations();
                 break;
             case 9:
                 cout << "Goodbye!" << endl;
@@ -127,7 +117,7 @@ int main(int argc, char*argv[])
         }
     }
     // Free memory and return
-    delete mt;
+    delete weatherData;
 
 
     return 0;

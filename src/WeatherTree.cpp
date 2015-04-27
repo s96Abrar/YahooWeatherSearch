@@ -10,7 +10,6 @@ using namespace std;
 
 WeatherTree::WeatherTree()
 {
-    opCount = 1;
     nil = new WeatherNode("","","","","","");
     root = nil;
     nil->isRed = false;
@@ -54,7 +53,10 @@ void WeatherTree::readFileIntoTree(string fileName)
 
 }
 void WeatherTree::printAllWeather(){
-    printAllWeather(root);
+    if(root != nil)
+        printAllWeather(root);
+    else
+        cout<<"Nothing to show"<<endl;
 }
 
 void WeatherTree::printAllWeather(WeatherNode * node)
@@ -197,7 +199,12 @@ void WeatherTree::DeleteAll(WeatherNode * node)
 /* Helper for the printMovieInventory recursive function */
 void WeatherTree::printSavedLocations()
 {
-    printSavedLocations(root);
+    if(root != nil){
+         cout<<"Your current saved locations are: "<<endl;
+        printSavedLocations(root);
+        }
+    else
+        cout<<"Nothing to show"<<endl;
     return;
 }
 

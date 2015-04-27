@@ -31,7 +31,6 @@ struct WeatherNode{
 
 class WeatherTree
 {
-        int opCount;
 
     public:
         WeatherTree();
@@ -66,10 +65,6 @@ class WeatherTree
         WeatherNode* searchMovieTree(WeatherNode * node, std::string title);
         WeatherNode *root;
         WeatherNode *nil;
-        WeatherNode *nil2;
-        WeatherNode* hottest;
-        WeatherNode* coldest;
-        void initJson();
         std::string curlResponse(std::string query);
         static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
         void printAllWeather(WeatherNode* node);
