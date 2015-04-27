@@ -5,33 +5,76 @@
 #include <algorithm>
 #include <curl/curl.h>
 #include <sstream>
+#include <fstream>
 using namespace std;
 
 WeatherTree::WeatherTree()
 {
     opCount = 1;
-    nil = new MovieNode(0, "", 0, 0);
+    nil = new WeatherNode("","","","","","");
     root = nil;
     nil->isRed = false;
     nil->leftChild = nil->rightChild = nil;
-    Assignment7Output = json_object_new_object();
 }
 
 WeatherTree::~WeatherTree()
 {
     DeleteAll(root);
-
-    // Clean up json object
-    json_object_put(Assignment7Output);
 }
-void WeatherTree::newQuery(){
-    cout<<"Enter city name"<<endl;
+/* reads file into tree */
+void WeatherTree::readFileIntoTree(string fileName)
+{
+    ifstream in_stream;
+    in_stream.open(fileName);
+    if (!in_stream)
+    {
+        cout << "Could not open file\n";
+        return;
+    }
     string city;
-    getline(cin, city);
-    transform(city.begin(), city.end(), city.begin(), ::tolower);
-    cout<<"Enter state name"<<endl;
     string state;
-    getline(cin, state);
+    while (!in_stream.eof())
+    {
+        city = "";
+        state = "";
+        getline(in_stream, city, ',');
+        getline(in_stream, state);
+        if(city != "" && state != ""){
+            state = state.substr(1, state.length());
+            if(city.find('(') < 1000000){
+
+                state = city.substr(city.find('(')+1);
+                state = state.substr(0, state.length()-1);
+                city = city.substr(0, city.length()-4);
+            }
+            newQuery(city, state, true);
+            cout<<endl;
+        }
+    }
+
+}
+void WeatherTree::printAllWeather(){
+    printAllWeather(root);
+}
+
+void WeatherTree::printAllWeather(WeatherNode * node)
+{
+    // Left Node
+    if(node->leftChild!=nil)
+        printAllWeather(node->leftChild);
+    // Value
+    findCity(node->name);
+    cout<<endl;
+    // Right Node
+    if(node->rightChild!=nil)
+        printAllWeather(node->rightChild);
+
+    return;
+}
+
+void WeatherTree::newQuery(string city, string state, bool addToTree){
+    cout<<"Loading weather data..."<<endl;
+    transform(city.begin(), city.end(), city.begin(), ::tolower);
     transform(state.begin(), state.end(), state.begin(), ::tolower);
     istringstream cityStream(city);
     string woeidQuery = "https://query.yahooapis.com/v1/public/yql?q=select%20woeid%20from%20geo.places%20where%20text%3D%22";
@@ -43,17 +86,59 @@ void WeatherTree::newQuery(){
     woeidQuery = woeidQuery + "%2C%20" + state + "%22&format=json&callback=";
     string woeidResponse = curlResponse(woeidQuery);
     json_object* queryResponse = json_tokener_parse(woeidResponse.c_str());
-    json_object* queryMain = json_object_object_get(queryResponse, "query"); /*Getting the array if it is a key value pair*/
+    json_object* queryMain = json_object_object_get(queryResponse, "query");
+    int resultCount = json_object_get_int(json_object_object_get(queryMain, "count"));
     if(!json_object_is_type(json_object_object_get(queryMain, "results"), json_type_null)){
-    json_object* queryResults = json_object_object_get(queryMain, "results");
-    json_object* queryPlaces = json_object_object_get(queryResults, "place");
-    json_object* queryWoeid = json_object_array_get_idx(queryPlaces, 0);
-    string woeid = json_object_get_string(json_object_object_get(queryWoeid, "woeid"));
-    string weatherQuery = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D" + woeid + "&format=json&callback=";
-    string weatherResponse = curlResponse(weatherQuery);
-    json_object* query2Response = json_tokener_parse(weatherResponse.c_str());
-    cout<<json_object_to_json_string_ext(query2Response, JSON_C_TO_STRING_PRETTY)<<endl;
-
+        string woeid;
+        json_object* queryResults = json_object_object_get(queryMain, "results");
+        json_object* queryPlaces = json_object_object_get(queryResults, "place");
+        if(resultCount > 1){
+            json_object* queryWoeid = json_object_array_get_idx(queryPlaces, 0);
+            woeid = json_object_get_string(json_object_object_get(queryWoeid, "woeid"));
+        }
+        else{
+            woeid = json_object_get_string(json_object_object_get(queryPlaces, "woeid"));
+        }
+        string weatherQuery = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D" + woeid + "&format=json&callback=";
+        string weatherResponse = curlResponse(weatherQuery);
+        json_object* query2Response = json_tokener_parse(weatherResponse.c_str());
+        json_object* query2Main = json_object_object_get(query2Response, "query");
+        json_object* query2Results = json_object_object_get(query2Main, "results");
+        json_object* query2Channel = json_object_object_get(query2Results, "channel");
+        json_object* query2Location= json_object_object_get(query2Channel, "location");
+        string city = json_object_get_string(json_object_object_get(query2Location, "city"));
+        string region = json_object_get_string(json_object_object_get(query2Location, "region"));
+        string country = json_object_get_string(json_object_object_get(query2Location, "country"));
+        string name;
+        if(region != "")
+            name = city + "(" + region + ")" + ", " + country;
+        else
+            name = city + ", " + country;
+        json_object* query2Item = json_object_object_get(query2Channel, "item");
+        json_object* query2Condition = json_object_object_get(query2Item, "condition");
+        string date = json_object_get_string(json_object_object_get(query2Condition, "date"));
+        string current = json_object_get_string(json_object_object_get(query2Condition, "temp"));
+        current += " F";
+        string currentConditions = json_object_get_string(json_object_object_get(query2Condition, "text"));
+        json_object* query2Forecast = json_object_object_get(query2Item, "forecast");
+        json_object* query2CurrentForecast = json_object_array_get_idx(query2Forecast, 0);
+        string high = json_object_get_string(json_object_object_get(query2CurrentForecast, "high"));
+        high += " F";
+        string low = json_object_get_string(json_object_object_get(query2CurrentForecast, "low"));
+        low += " F";
+        cout<<"Weather forecast for : "<<name<<endl;
+        cout<<"Date & Time: "<<date<<endl;
+        cout<<"Current Temperature: "<<current<<endl;
+        cout<<"Current Conditions "<<currentConditions<<endl;
+        cout<<"Temperature High: "<<high<<endl;
+        cout<<"Temperature Low: "<<low<<endl;
+        if(addToTree){
+            addWeatherNode(name, date, current, currentConditions, high, low);
+            cout<<"City added to saved locations"<<endl;
+            }
+    }
+    else{
+        cout<<"Unable to find any results please try again"<<endl;
     }
 }
 size_t WeatherTree::WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
@@ -76,19 +161,13 @@ string WeatherTree::curlResponse(string query){
     }
     return readBuffer;
 }
+
 int WeatherTree::countLongestPath()
 {
-    json_object * newJSON = json_object_new_object();
     int longestPath = countLongestPath(root);
-    json_object *jsonOperation = json_object_new_string("height");
-    json_object_object_add(newJSON,"operation",jsonOperation);
-    json_object *jsonOutput = json_object_new_string(to_string(longestPath).c_str());
-    json_object_object_add(newJSON,"output",jsonOutput);
-    json_object_object_add(Assignment7Output,to_string(opCount).c_str(),newJSON);
-    opCount++;
     return longestPath;
 }
-int WeatherTree::countLongestPath(MovieNode * node)
+int WeatherTree::countLongestPath(WeatherNode * node)
 {
     if (node == nil)
         return 0;
@@ -101,7 +180,7 @@ int WeatherTree::countLongestPath(MovieNode * node)
 }
 
 /* Used to delete all nodes in the tree */
-void WeatherTree::DeleteAll(MovieNode * node)
+void WeatherTree::DeleteAll(WeatherNode * node)
 {
     // clean to the left
     if (node->leftChild != nil)
@@ -115,68 +194,38 @@ void WeatherTree::DeleteAll(MovieNode * node)
     return;
 }
 
-void WeatherTree::initJson()
-{
-    Assignment7Output = json_object_new_object();
-}
-
 /* Helper for the printMovieInventory recursive function */
-void WeatherTree::printMovieInventory()
+void WeatherTree::printSavedLocations()
 {
-    // Create the json object for this operation
-    json_object * newJSON = json_object_new_object();
-    json_object * travLog = json_object_new_array();
-
-    printMovieInventory(root,travLog);
-
-    // Update our json object
-    json_object *jsonOperation = json_object_new_string("traverse");
-    json_object_object_add(newJSON,"operation",jsonOperation);
-    json_object_object_add(newJSON,"output",travLog);
-    json_object_object_add(Assignment7Output,to_string(opCount).c_str(),newJSON);
-
-    opCount++;
-
+    printSavedLocations(root);
     return;
 }
 
 /* Prints the inventory(in order traversal) */
-void WeatherTree::printMovieInventory(MovieNode * node, json_object * traverseLog)
+void WeatherTree::printSavedLocations(WeatherNode * node)
 {
-
     // Left Node
     if(node->leftChild!=nil)
-        printMovieInventory(node->leftChild,traverseLog);
-
+        printSavedLocations(node->leftChild);
     // Value
-    cout<<"Movie: "<<node->title<< endl;
-
-    // Update the traversal log
-    json_object *curTitle = json_object_new_string(node->title.c_str());
-    json_object_array_add(traverseLog, curTitle);
-
+    cout<<node->name<< endl;
     // Right Node
     if(node->rightChild!=nil)
-        printMovieInventory(node->rightChild,traverseLog);
+        printSavedLocations(node->rightChild);
 
     return;
 }
 
 
-void WeatherTree::addMovieNode(int ranking, std::string title, int releaseYear, int quantity)
-{
-    //cout << "entered!\n";
-    // Create the json object for this operation
-    json_object * newJSON = json_object_new_object();
-    // Create a log for the traversal
-    json_object * travLog = json_object_new_array();
 
+void WeatherTree::addWeatherNode(string name, string date, string current, string currentConditions, string high, string low)
+{
     // Create the node we will be inserting
-    MovieNode * newMovie = new MovieNode(ranking,title,releaseYear,quantity);
+    WeatherNode * newMovie = new WeatherNode(name, date,current, currentConditions, high, low);
     newMovie->leftChild = nil;
     newMovie->rightChild = nil;
-    MovieNode * x = root;
-    MovieNode * y = nil;
+    WeatherNode * x = root;
+    WeatherNode * y = nil;
 
     // Do we have an empty tree?
     if (root == nil){
@@ -191,12 +240,9 @@ void WeatherTree::addMovieNode(int ranking, std::string title, int releaseYear, 
         // Get to the end of the tree, where we need to add this node.
         while (x != nil)
         {
-            // Add the current node to the traversal log before moving to next.
-            json_object *curTitle = json_object_new_string(x->title.c_str());
-            json_object_array_add(travLog, curTitle);
-
+            // Add the current node to the traversal log before moving to next
             y = x;
-            if(newMovie->title.compare(x->title) < 0)
+            if(newMovie->name.compare(x->name) < 0)
                 x = x->leftChild;
             else
                 x = x->rightChild;
@@ -207,29 +253,22 @@ void WeatherTree::addMovieNode(int ranking, std::string title, int releaseYear, 
         newMovie->parent = y;
 
         // Determine which child to this previous node we are at.
-        if (newMovie->title.compare(y->title) < 0)
+        if (newMovie->name.compare(y->name) < 0)
             y->leftChild = newMovie;
         else
             y->rightChild = newMovie;
 
     }
-    // Update our json object
-    json_object *jsonOperation = json_object_new_string("add");
-    json_object_object_add(newJSON,"operation",jsonOperation);
-    json_object *jsonTitle = json_object_new_string(title.c_str());
-    json_object_object_add(newJSON,"parameter",jsonTitle);
-    json_object_object_add(newJSON,"output",travLog);
-    json_object_object_add(Assignment7Output,to_string(opCount).c_str(),newJSON);
-    opCount++;
     rbInsertFix(newMovie);
     //isValid();
     return;
 
 }
-void WeatherTree::rbInsertFix(MovieNode* x){
+
+void WeatherTree::rbInsertFix(WeatherNode* x){
             x->leftChild = nil;
             x->rightChild = nil;
-            MovieNode* y = NULL;
+            WeatherNode* y = NULL;
             x->isRed = true;
             while((x != root) && (x->parent->isRed == true)){
                 if ( x->parent == x->parent->parent->leftChild ) {
@@ -272,142 +311,72 @@ void WeatherTree::rbInsertFix(MovieNode* x){
         root->isRed = false;
 }
 
-void WeatherTree::findMovie(std::string title)
+void WeatherTree::findCity(std::string title)
 {
-    // Create a traversal log
-    json_object * travLog = json_object_new_array();
     // Find the movie
-    MovieNode * foundMovie = searchMovieTree(root,title,travLog);
-    if (foundMovie != nil)
+    WeatherNode * foundCity = searchMovieTree(root,title);
+    if (foundCity != nil)
     {
-        cout << "Movie Info:" << endl;
-        cout << "===========" << endl;
-        cout << "Ranking:" << foundMovie->ranking << endl;
-        cout << "Title:" << foundMovie->title << endl;
-        cout << "Year:" << foundMovie->year << endl;
-        cout << "Quantity:" << foundMovie->quantity << endl;
+        cout<<"Weather forecast for : "<<foundCity->name<<endl;
+        cout<<"Date & Time: "<<foundCity->date<<endl;
+        cout<<"Current Temperature: "<<foundCity->current<<endl;
+        cout<<"Current Conditions "<<foundCity->currentConditions<<endl;
+        cout<<"Temperature High: "<<foundCity->high<<endl;
+        cout<<"Temperature Low: "<<foundCity->low<<endl;
     }
-    else
-        cout << "Movie not found." << endl;
-
+    else{
+        cout << "City not found in saved locations" << endl;
+        cout << "Search with the format city(region if any), country" << endl;
+        cout << "If you still can't find it add it by clicking 3 in the main menu" << endl;
+        }
     return;
 }
 
-MovieNode* WeatherTree::searchMovieTree(MovieNode * node, std::string title, json_object * traverseLog)
+WeatherNode* WeatherTree::searchMovieTree(WeatherNode * node, std::string title)
 {
-    // Add the current node to the traverse log
-    if (node != nil)
-    {
-        json_object *curTitle = json_object_new_string(node->title.c_str());
-        json_object_array_add(traverseLog, curTitle);
-    }
-
     // If the node is NULL, we just return. Failed to find node.
     if (node == nil)
         return nil;
     // Return this node if it is the one we are searching for
-    else if (node->title == title)
+    else if (node->name == title)
         return node;
 
     // Else return the correct recursive call.
     else
     {
-        if(title.compare(node->title) < 0)
-            return searchMovieTree(node->leftChild,title,traverseLog);
+        if(title.compare(node->name) < 0)
+            return searchMovieTree(node->leftChild,title);
 
         else
-            return searchMovieTree(node->rightChild,title,traverseLog);
+            return searchMovieTree(node->rightChild,title);
     }
 }
 
-void WeatherTree::rentMovie(std::string title)
-{
-    // Create the json object for this operation
-    json_object * newJSON = json_object_new_object();
-
-    int stockOutput = 0;
-
-    json_object * travLog = json_object_new_array();
-    MovieNode * foundMovie = searchMovieTree(root,title,travLog);
-
-    // If the movie exists.
-    if (foundMovie != NULL)
-    {
-        // If it's in stock.
-        if (foundMovie->quantity > 0)
-        {
-            cout << "Movie has been rented." << endl;
-            foundMovie->quantity--;
-            stockOutput = foundMovie->quantity;
-
-            // Update our json object
-            json_object *jsonOperation = json_object_new_string("rent");
-            json_object_object_add(newJSON,"operation",jsonOperation);
-            json_object *jsonTitle = json_object_new_string(title.c_str());
-            json_object_object_add(newJSON,"parameter",jsonTitle);
-            json_object *jsonOutput = json_object_new_string(to_string(stockOutput).c_str());
-            json_object_object_add(newJSON,"output",jsonOutput);
-            json_object_object_add(Assignment7Output,to_string(opCount).c_str(),newJSON);
-
-            opCount++;
-
-            //change this to print information
-            cout << "Movie Info:" << endl;
-            cout << "===========" << endl;
-            cout << "Ranking:" << foundMovie->ranking << endl;
-            cout << "Title:" << foundMovie->title << endl;
-            cout << "Year:" << foundMovie->year << endl;
-            cout << "Quantity:" << foundMovie->quantity << endl;
-            // If the stock is 0 delete the movie
-            if (foundMovie->quantity == 0)
-                deleteMovieNode(foundMovie->title);
-
-        }
-        // If it's not in stock.
-        else
-            cout << "Movie out of stock." << endl;
-
-    }
-    // If it doesn't exist.
-    else
-        cout << "Movie not found." << endl;
-
-}
-
-void WeatherTree::deleteMovieNode(std::string title)
+void WeatherTree::deleteWeatherNode(std::string title)
 {
 
-    // Create the json object for this operation
-    json_object * newJSON = json_object_new_object();
-
-    json_object * travLog = json_object_new_array();
-    MovieNode * foundMovie = searchMovieTree(root,title,travLog);
+    WeatherNode * foundMovie = searchMovieTree(root,title);
 
     // If the movie exists
     if (foundMovie != nil)
     {
         rbDelete(foundMovie);
-        json_object *jsonOperation = json_object_new_string("delete");
-        json_object_object_add(newJSON,"operation",jsonOperation);
-        json_object *jsonTitle = json_object_new_string(title.c_str());
-        json_object_object_add(newJSON,"parameter",jsonTitle);
-        json_object_object_add(newJSON,"output",travLog);
-        json_object_object_add(Assignment7Output,to_string(opCount).c_str(),newJSON);
-        opCount++;
-
     }
     // If it doesn't exist
-    else
-        cout << "Movie not found." << endl;
+    else{
+        cout << "City not found in saved locations" << endl;
+        cout << "Search with the format city(region if any), country" << endl;
+        cout << "If you still can't find it, it's probably not in your saved locations" << endl;
+    }
+
 
 
 
 }
-void WeatherTree::rbTransplant(MovieNode * u, MovieNode * v)
+void WeatherTree::rbTransplant(WeatherNode * u, WeatherNode * v)
 {
     if (u->parent == nil)
         root = v;
-
     else if (u == u->parent->leftChild)
         u->parent->leftChild = v;
     else
@@ -416,11 +385,11 @@ void WeatherTree::rbTransplant(MovieNode * u, MovieNode * v)
 
 }
 
-void WeatherTree::rbDelete(MovieNode * z)
+void WeatherTree::rbDelete(WeatherNode * z)
 {
-    MovieNode * y = z;
+    WeatherNode * y = z;
     bool yOriginalColor = y->isRed;
-    MovieNode * x = nil;
+    WeatherNode * x = nil;
     if (z->leftChild == nil){
         x = z->rightChild;
         rbTransplant(z,z->rightChild);
@@ -454,9 +423,9 @@ void WeatherTree::rbDelete(MovieNode * z)
 
 }
 
-void WeatherTree::rbDeleteFixup(MovieNode *x)
+void WeatherTree::rbDeleteFixup(WeatherNode *x)
 {
-    MovieNode * w = NULL;
+    WeatherNode * w = NULL;
     while ((x != root) && (x->isRed == false)){
         if (x == x->parent->leftChild){
             w = x->parent->rightChild;
@@ -516,37 +485,21 @@ void WeatherTree::rbDeleteFixup(MovieNode *x)
     isValid();
 }
 
-int WeatherTree::countMovieNodes()
+int WeatherTree::countWeatherNodes()
 {
-    // Create the json object for this operation
-    json_object * newJSON = json_object_new_object();
-
     // Determine the count
-    int count = countMovieNodes(root);
-
-    // Update our json object
-    json_object *jsonOperation = json_object_new_string("count");
-    json_object_object_add(newJSON,"operation",jsonOperation);
-    json_object *jsonOutput = json_object_new_string(to_string(count).c_str());
-    json_object_object_add(newJSON,"output",jsonOutput);
-    json_object_object_add(Assignment7Output,to_string(opCount).c_str(),newJSON);
-    opCount++;
-
+    int count = countWeatherNodes(root);
     return count;
 }
 
-int WeatherTree::countMovieNodes(MovieNode *node)
+int WeatherTree::countWeatherNodes(WeatherNode *node)
 {
     if (node == nil)
         return 0;
-    return countMovieNodes(node->leftChild) + countMovieNodes(node->rightChild) + 1;
+    return countWeatherNodes(node->leftChild) + countWeatherNodes(node->rightChild) + 1;
 }
 
-json_object* WeatherTree::getJsonObject()
-{
-    return Assignment7Output;
-}
-int WeatherTree::rbValid(MovieNode * node)
+int WeatherTree::rbValid(WeatherNode * node)
 {
     int lh = 0;
     int rh = 0;
@@ -568,7 +521,7 @@ int WeatherTree::rbValid(MovieNode * node)
         }
 
         // Check for valid binary search tree.
-        if ((node->leftChild != nil && node->leftChild->title.compare(node->title) > 0) || (node->rightChild != nil && node->rightChild->title.compare(node->title) < 0))
+        if ((node->leftChild != nil && node->leftChild->name.compare(node->name) > 0) || (node->rightChild != nil && node->rightChild->name.compare(node->name) < 0))
         {
             cout << "This tree contains a binary tree violation" << endl;
             return 0;
@@ -599,8 +552,8 @@ int WeatherTree::rbValid(MovieNode * node)
     }
 }
 
-void WeatherTree::leftRotate(MovieNode *x){
-    MovieNode * y = x->rightChild;
+void WeatherTree::leftRotate(WeatherNode *x){
+    WeatherNode * y = x->rightChild;
     x->rightChild = y->leftChild;
     if ( y->leftChild != nil)
         y->leftChild->parent = x;
@@ -619,8 +572,8 @@ void WeatherTree::leftRotate(MovieNode *x){
    x->parent = y;
 }
 
-void WeatherTree::rightRotate(MovieNode *x){
-    MovieNode * y = x->leftChild;
+void WeatherTree::rightRotate(WeatherNode *x){
+    WeatherNode * y = x->leftChild;
     x->leftChild = y->rightChild;
     if ( y->rightChild != nil )
         y->rightChild->parent = x;

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1430087912 source:/home/rishab/Dropbox/Computer Science/CSCI-2270/Final Project/CSCI2270_FinalProject/main.cpp
+1430126713 source:/home/rishab/Dropbox/Computer Science/CSCI-2270/Final Project/CSCI2270_FinalProject/main.cpp
 	<iostream>
 	"WeatherTree.h"
 	<fstream>
@@ -13,10 +13,37 @@
 	<sstream>
 	<algorithm>
 
-1430087610 /home/rishab/Dropbox/Computer Science/CSCI-2270/Final Project/CSCI2270_FinalProject/include/WeatherTree.h
+1430127191 /home/rishab/Dropbox/Computer Science/CSCI-2270/Final Project/CSCI2270_FinalProject/include/WeatherTree.h
 	<json/json.h>
 
-1430088173 source:/home/rishab/Dropbox/Computer Science/CSCI-2270/Final Project/CSCI2270_FinalProject/src/WeatherTree.cpp
+1430127822 source:/home/rishab/Dropbox/Computer Science/CSCI-2270/Final Project/CSCI2270_FinalProject/src/WeatherTree.cpp
+	<iostream>
+	"WeatherTree.h"
+	<stdio.h>
+	<stdlib.h>
+	<algorithm>
+	<curl/curl.h>
+	<sstream>
+	<fstream>
+
+1430097995 source:/home/user/Dropbox/Computer Science/CSCI-2270/Final Project/CSCI2270_FinalProject/main.cpp
+	<iostream>
+	"WeatherTree.h"
+	<fstream>
+	<string>
+	<json/json.h>
+	<stdlib.h>
+	<vector>
+	<string.h>
+	<cstdlib>
+	<curl/curl.h>
+	<sstream>
+	<algorithm>
+
+1430097995 /home/user/Dropbox/Computer Science/CSCI-2270/Final Project/CSCI2270_FinalProject/include/WeatherTree.h
+	<json/json.h>
+
+1430097995 source:/home/user/Dropbox/Computer Science/CSCI-2270/Final Project/CSCI2270_FinalProject/src/WeatherTree.cpp
 	<iostream>
 	"WeatherTree.h"
 	<stdio.h>

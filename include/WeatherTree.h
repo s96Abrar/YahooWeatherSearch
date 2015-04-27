@@ -3,29 +3,28 @@
 
 #include <json/json.h>
 
-struct MovieNode{
-    int ranking;
-    std::string title;
-    int year;
-    int quantity;
+struct WeatherNode{
+    std::string name;
+    std::string date;
+    std::string current;
+    std::string currentConditions;
+    std::string high;
+    std::string low;
     bool isRed;
-    MovieNode *parent;
-    MovieNode *leftChild;
-    MovieNode *rightChild;
+    WeatherNode *parent;
+    WeatherNode *leftChild;
+    WeatherNode *rightChild;
 
-    MovieNode(){};
+    WeatherNode(){};
 
-    MovieNode(int in_ranking, std::string in_title, int in_year, int in_quantity)
-    {
-        ranking = in_ranking;
-        title = in_title;
-        year = in_year;
-        quantity = in_quantity;
-        // Now that we are using nil these NULL's should be overwritten in addMovieNode.
-    	leftChild = NULL;
-    	rightChild = NULL;
-        parent = NULL;
-        isRed = true;
+
+    WeatherNode(std::string in_name, std::string in_date, std::string in_current, std::string in_currentConditions, std::string in_high,std::string in_low){
+        name = in_name;
+        date = in_date;
+        current = in_current;
+        currentConditions = in_currentConditions;
+        high = in_high;
+        low = in_low;
     }
 
 };
@@ -37,47 +36,46 @@ class WeatherTree
     public:
         WeatherTree();
         virtual ~WeatherTree();
-        void printMovieInventory();//
+        void printSavedLocations();//
         void printAllWeather();
-        int countMovieNodes();//
-        int countWeatherNode();
-        void deleteMovieNode(std::string title);//
+        int countWeatherNodes();
         void deleteWeatherNode(std::string city);
-        void addMovieNode(int ranking, std::string title, int releaseYear, int quantity);//
-        //void addWeatherNode(int )
-        void findMovie(std::string title);
+        void addWeatherNode(std::string name, std::string date, std::string current, std::string currentConditions, std::string high,std::string low);
         void findCity(std::string city);
-        void rentMovie(std::string title);
         void isValid();
         int countLongestPath();
-        void newQuery();
-        //use this to return the json object from the class when you are ready to write it to a file
-        json_object* getJsonObject();
+        void newQuery(std::string city,std::string state, bool);
+        void readFileIntoTree(std::string);
+
 
     protected:
 
     private:
-        void DeleteAll(MovieNode * node); //use this for the post-order traversal deletion of the tree
-        void printMovieInventory(MovieNode * node, json_object * traverseLog);
-        void rbAddFixup(MovieNode * node); // called after insert to fix tree
-        void leftRotate(MovieNode * x);
-        void rbDelete(MovieNode * x);
-        void rightRotate(MovieNode * x);
-        void rbDeleteFixup(MovieNode * node);
-        void rbTransplant(MovieNode * u, MovieNode * v);
-        int rbValid(MovieNode * node);
-        void rbInsertFix(MovieNode* node);
-        int countMovieNodes(MovieNode *node);
-        int countLongestPath(MovieNode *node);
-        MovieNode* searchMovieTree(MovieNode * node, std::string title, json_object * traverseLog);
-        MovieNode *root;
-        MovieNode *nil;
+        void DeleteAll(WeatherNode * node); //use this for the post-order traversal deletion of the tree
+        void printSavedLocations(WeatherNode * node);
+        void rbAddFixup(WeatherNode * node); // called after insert to fix tree
+        void leftRotate(WeatherNode * x);
+        void rbDelete(WeatherNode * x);
+        void rightRotate(WeatherNode * x);
+        void rbDeleteFixup(WeatherNode * node);
+        void rbTransplant(WeatherNode * u, WeatherNode * v);
+        int rbValid(WeatherNode * node);
+        void rbInsertFix(WeatherNode* node);
+        int countWeatherNodes(WeatherNode *node);
+        int countLongestPath(WeatherNode *node);
+        WeatherNode* searchMovieTree(WeatherNode * node, std::string title);
+        WeatherNode *root;
+        WeatherNode *nil;
+        WeatherNode *nil2;
+        WeatherNode* hottest;
+        WeatherNode* coldest;
         void initJson();
         std::string curlResponse(std::string query);
         static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
+        void printAllWeather(WeatherNode* node);
         // Count of how many operations we have done.
         //including the json_object in the class makes it global within the class, much easier to work with
-        json_object * Assignment7Output;
+
 
 
 };

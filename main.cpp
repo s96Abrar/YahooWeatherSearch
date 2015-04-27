@@ -31,18 +31,19 @@ struct Movie{
 
 void displayMenu();
 int getFileSize(char * fileName);
-void readFileIntoTree(WeatherTree * mt, char * fileName);
 
 int main(int argc, char*argv[])
 {
     int input;
+    string city;
+    string state;
     // Determine the size of the text file.
     //int fileSize = getFileSize(argv[1]);
     //cout << "about to create object\n";
     // Create a new communication network
     WeatherTree *mt = new WeatherTree();
     // Read each line and add it to tree
-    readFileIntoTree(mt, argv[1]);
+    mt->readFileIntoTree(string(argv[1]));
 
     // Flag used for exiting menu
     bool quit = false;
@@ -71,29 +72,49 @@ int main(int argc, char*argv[])
             */
             // Rent a movie
             case 1:
-                mt->newQuery();
+                cout << "Enter file name(including the extension like .txt):" << endl;
+                getline(cin,title);
+                mt->readFileIntoTree(title);
+                break;
+            case 2:
+                mt->printAllWeather();
+                break;
+            case 3:
+                cout<<"Enter city name"<<endl;
+                getline(cin, city);
+                cout<<"Enter state/country name"<<endl;
+                getline(cin, state);
+                mt->newQuery(city, state, false);
                 break;
             // Print the inventory
-            case 2:
-                mt->printMovieInventory();
-                mt->isValid();
-                break;
-
-            // Delete Node
-            case 3:
-                cout << "Enter title:" << endl;
+            case 4:
+                cout << "Enter city name:" << endl;
                 getline(cin,title);
-                mt->deleteMovieNode(title);
+                mt->findCity(title);
+                break;
+            case 5:
+                cout<<"Enter city name"<<endl;
+                getline(cin, city);
+                cout<<"Enter state/country name"<<endl;
+                getline(cin, state);
+                mt->newQuery(city, state, true);
+                break;
+            // Delete Node
+            case 6:
+                cout << "Enter city name:" << endl;
+                getline(cin,title);
+                mt->deleteWeatherNode(title);
                 break;
             // Count Tree
-            case 4:
-                cout << "Tree contains: " << mt->countMovieNodes() << " nodes." << endl;
+            case 7:
+                cout << "The number of saved cities is " << mt->countWeatherNodes() << endl;
                 break;
             // Quit
-            case 5:
-                cout<<mt->countLongestPath()<<endl;
+            case 8:
+                cout<<"Your current saved locations are: "<<endl;
+                mt->printSavedLocations();
                 break;
-            case 6:
+            case 9:
                 cout << "Goodbye!" << endl;
                 quit = true;
                 break;
@@ -108,6 +129,7 @@ int main(int argc, char*argv[])
     // Free memory and return
     delete mt;
 
+
     return 0;
 }
 
@@ -115,13 +137,15 @@ int main(int argc, char*argv[])
 void displayMenu()
 {
     cout << "======Main Menu=====" << endl;
-    //cout << "1. Find a movie" << endl;
-    cout << "1. Rent a movie" << endl;
-    cout << "2. Print the inventory" << endl;
-    cout << "3. Delete a movie" << endl;
-    cout << "4. Count the movies" << endl;
-    cout << "5. Count longest path" << endl;
-    cout << "6. Quit"<<endl;
+    cout << "1. Open locations file" << endl;
+    cout << "2. Show weather for all saved locations" << endl;
+    cout << "3. View current weather details of a location from the web" << endl;
+    cout << "4. View weather from saved data" << endl;
+    cout << "5. Add place to saved locations" << endl;
+    cout << "6. Delete a place form saved locations" << endl;
+    cout << "7. Count the number of places in saved locations" << endl;
+    cout << "8. Show all saved locations" << endl;
+    cout << "9. Quit"<<endl;
     return;
 }
 
@@ -144,34 +168,5 @@ int getFileSize(char * fileName)
     return count;
 }
 
-/* reads file into tree */
-void readFileIntoTree(WeatherTree * mt, char * fileName)
-{
-    ifstream in_stream;
-    //cout << fileName << endl;
-    in_stream.open(fileName);
-    if (!in_stream)
-    {
-        cout << "Could not open file\n";
-        return;
-    }
-    string ranking;
-    string title;
-    string releaseYear;
-    string quantity;
 
-    while (!in_stream.eof())
-    {
-        title ="";
-        getline(in_stream, ranking, ',');
-        getline(in_stream, title, ',');
-        getline(in_stream, releaseYear, ',');
-        getline(in_stream, quantity); // "\n" is the default delimiter
-        if (title != "")
-        {
-            //cout << "Adding: " << title << endl;
-            mt->addMovieNode(atoi(ranking.c_str()),title,atoi(releaseYear.c_str()),atoi(quantity.c_str()));
-        }
-    }
-}
 
