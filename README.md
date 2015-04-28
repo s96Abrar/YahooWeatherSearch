@@ -9,9 +9,9 @@ Install by typing sudo apt-get install libjson0 libjson0-dev in terminal
 2.curl  
 Install by typing sudo apt-get install libcurl4-gnutls-dev  in terminal
 curl also requires linking while compiling, to add it in codeblocks go to Settings->Compiler->Linker Settings then in Other linker options: type -lcurl  
-*Probably should: sudo apt-get update  
+*Probably should do a sudo apt-get update  
 #Instructions to run
-The applications should be fairly easy to run if you are running linux(Debian based) with the latest version of Code::Blocks installed. It may work on other operating systems as well but I have not tested it, you can try but I am fairly certain that since the library of JSON used is linux specific it won't be easy.  
+The applications should be fairly easy to run if you are running linux(Debian based) with the latest version of Code::Blocks installed. It may work on other operating systems as well but I have not tested it, you can try but I am fairly certain that since the library of JSON used is linux specific and it won't be easy.  
 Allright so this is what you need to do:  
 1. Get all the dependencies listed in the dependencies section.  
 2. Make sure you set the correct linker settings(Instructions also given in the dependencies section for curl)  
