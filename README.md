@@ -10,7 +10,9 @@ Install by typing sudo apt-get install libjson0 libjson0-dev in terminal
 Install by typing sudo apt-get install libcurl4-gnutls-dev  in terminal
 curl also requires linking while compiling, to add it in codeblocks go to Settings->Compiler->Linker Settings then in Other linker options: type -lcurl  
 *Probably should do a sudo apt-get update  
-#Instructions to run
+#System requirements
+This version will only probably only run on linux but you can probably run it in other operating systems if you use an alternative json library and switch out the JSON stuff
+#How to run
 The applications should be fairly easy to run if you are running linux(Debian based) with the latest version of Code::Blocks installed. It may work on other operating systems as well but I have not tested it, you can try but I am fairly certain that since the library of JSON used is linux specific and it won't be easy.  
 Allright so this is what you need to do:  
 1. Get all the dependencies listed in the dependencies section.  
@@ -27,5 +29,8 @@ Allright so this is what you need to do:
     ->"Count the number of places in saved locations": Counts the number of places in saved locations.  
     ->"Show all saved locations": Shows a list of all the saved locations.  
     ->"Quit": I'm fairly certain you can figure this one out.  
- 
+#Group Members
+Just me!
+#Open issues/bugs
+Havent found any but please do report them if you find any
 
