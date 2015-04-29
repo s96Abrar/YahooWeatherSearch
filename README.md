@@ -18,7 +18,7 @@ Allright so this is what you need to do:
 1. Get all the dependencies listed in the dependencies section.  
 2. Make sure you set the correct linker settings(Instructions also given in the dependencies section for curl)  
 3. If you have setup everything properly upto this point you should be able to compile and run it, the program takes one command line argument, the name of the file with locations that you want to load on startup, if the file is not openable then you will get an error saying so when you run it, if the file is empty then the program simply will not load anything from it.      
-4. You can setup a locations.txt file with cities that you want to load the weather for on program startup, I have put 4 cities in there, if you run it without modifying the file they should load automatically. You can change the contents by adding cities using the format city(state/region), country or city, country/region Example "Boulder(CO) United States" or "London, UK"  
+4. You can setup a locations.txt file with cities that you want to load the weather for on program startup, I have put 4 cities in there, if you run it without modifying the file they should load automatically. You can change the contents by adding cities using the format city(state/region), country or city, country/region Example "Boulder(CO), United States" or "London, UK"  
 5. The main menu should be fairly easy to understand, it has the following features:  
     ->"Open locations file": This allows you to open a file with locations in it and load weather data for those places like the locations.txt  
     ->"Show weather for all saved locations": Shows the saved weather data for all saved locations  
