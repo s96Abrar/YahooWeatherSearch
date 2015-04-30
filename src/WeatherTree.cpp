@@ -150,7 +150,13 @@ void WeatherTree::newQuery(string city, string state, bool addToTree){
         woeidQuery = woeidQuery + token + "%20";
     }
     woeidQuery = woeidQuery.substr(0, woeidQuery.length()-3);
-    woeidQuery = woeidQuery + "%2C%20" + state + "%22&format=json&callback=";
+    woeidQuery = woeidQuery + "%2C%20";
+    istringstream stateStream(state);
+    while(getline(stateStream, token, ' ')){
+        woeidQuery = woeidQuery + token + "%20";
+    }
+    woeidQuery = woeidQuery.substr(0, woeidQuery.length()-3);
+    woeidQuery = woeidQuery + "%22&format=json&callback=";
     string woeidResponse = curlResponse(woeidQuery);
     json_object* queryResponse = json_tokener_parse(woeidResponse.c_str());
     json_object* queryMain = json_object_object_get(queryResponse, "query");
