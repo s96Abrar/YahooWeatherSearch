@@ -5,9 +5,9 @@ The user can make a plain text file with places that he usually checks the weath
 When the program is running the user can do various operations on the data such as searching adding and deleting locations as well as checking for weather of a given location without adding it to the tree
 # Dependencies
 1.json-c  
-Install by typing "sudo apt-get install libjson0 libjson0-dev in terminal"  
+Install by typing "sudo apt-get install libjson0 libjson0-dev" in terminal  
 2.curl  
-Install by typing "sudo apt-get install libcurl4-gnutls-dev in terminal"  
+Install by typing "sudo apt-get install libcurl4-gnutls-dev" in terminal  
 
 *Probably should do a "sudo apt-get update" before installing the libraries  
 #System requirements
