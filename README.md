@@ -10,9 +10,9 @@ Install by typing "sudo apt-get install libjson0 libjson0-dev" in terminal
 Install by typing "sudo apt-get install libcurl4-gnutls-dev" in terminal  
 
 *Probably should do a "sudo apt-get update" before installing the libraries  
-#System requirements
+# System requirements
 This version has been developed and tested on Ubuntu(Debian based linux) but it may run in other operating systems depending on the avalibilities of the required libraries
-#How to run
+# How to run
 The applications should be fairly easy to run if you are running linux(Debian based) with the latest version of the g++ compiler installed.
 All right so this is what you need to do:  
 1. Get all the dependencies listed in the dependencies section.  
@@ -30,8 +30,8 @@ All right so this is what you need to do:
     ->"Count the number of places in saved locations": Counts the number of places in saved locations.  
     ->"Show all saved locations": Shows a list of all the saved locations.  
     ->"Quit": I'm fairly certain you can figure this one out.  
-#Group Members
+# Group Members
 Just me!(Rishab Kanwal)
-#Open issues/bugs
+# Open issues/bugs
 Haven't found any but please do report them if you do
 
