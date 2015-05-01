@@ -13,12 +13,13 @@ curl also requires linking while compiling, to add it in codeblocks go to Settin
 #System requirements
 This version will only probably only run on linux but you can probably run it in other operating systems if you use an alternative json library and switch out the JSON stuff
 #How to run
-The applications should be fairly easy to run if you are running linux(Debian based) with the latest version of Code::Blocks installed. It may work on other operating systems as well but I have not tested it, you can try but I am fairly certain that since the library of JSON used is linux specific and it won't be easy.  
+The applications should be fairly easy to run if you are running linux(Debian based) with the latest version of the g++ compiler installed. It may work on other operating systems as well but I have not tested it, you can try it if you like but I suggest using Debian based linux
 Allright so this is what you need to do:  
 1. Get all the dependencies listed in the dependencies section.  
-2. Make sure you set the correct linker settings(Instructions also given in the dependencies section for curl)  
-3. If you have setup everything properly upto this point you should be able to compile and run it, the program takes one command line argument, the name of the file with locations that you want to load on startup, if the file is not openable then you will get an error saying so when you run it, if the file is empty then the program simply will not load anything from it.      
-4. You can setup a locations.txt file with cities that you want to load the weather for on program startup, I have put 4 cities in there, if you run it without modifying the file they should load automatically. You can change the contents by adding cities using the format city(state/region), country or city, country/region Example "Boulder(CO), United States" or "London, UK"  
+2(a). Code::Blocks: Open the .cbp file Make sure you set the correct linker settings(Instructions also given in the dependencies section for curl). If you have setup everything properly upto this point you should be able to compile and run it  
+2(b). Terminal: Using terminal cd into ".../CSCI2270_FinalProject/Build_using_terminal". Then build using "g++ -o YahooWeatherSearch main.cpp WeatherTree.cpp -lcurl -l json -std=c++11". This should generate a file called YahooWeatherSearch you can run it using "./YahooWeatherSearch locations.txt"  
+3. The program takes one command line argument, the name of the file with locations that you want to load on startup. You can run it without the filename if you want. You can change the file in Code::Blocks using Project->Set programs' arguments... or in terminal using "./YahooWeatherSearch filename"  
+4. You can setup text file opened on startup file with cities that you want to load the weather for on program startup, I have put 4 cities in there, if you run it without modifying the file they should load automatically. You can change the contents by adding cities using the format city(state/region), country or city, country/region Example "Boulder(CO), United States" or "London, UK". The default one that I have used is "locations.txt"  
 5. The main menu should be fairly easy to understand, it has the following features:  
     ->"Open locations file": This allows you to open a file with locations in it and load weather data for those places like the locations.txt  
     ->"Show weather for all saved locations": Shows the saved weather data for all saved locations  
@@ -30,7 +31,7 @@ Allright so this is what you need to do:
     ->"Show all saved locations": Shows a list of all the saved locations.  
     ->"Quit": I'm fairly certain you can figure this one out.  
 #Group Members
-Just me!
+Just me!(Rishab Kanwal)
 #Open issues/bugs
 Havent found any but please do report them if you find any
 
