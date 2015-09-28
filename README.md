@@ -30,8 +30,6 @@ All right so this is what you need to do:
     ->"Count the number of places in saved locations": Counts the number of places in saved locations.  
     ->"Show all saved locations": Shows a list of all the saved locations.  
     ->"Quit": I'm fairly certain you can figure this one out.  
-# Group Members
-Just me!(Rishab Kanwal)
 # Open issues/bugs
 Haven't found any but please do report them if you do
 
