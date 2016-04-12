@@ -17,5 +17,3 @@ The applications should be fairly easy to run if you are running linux(Debian ba
 All right so this is what you need to do:  
 1. Get all the dependencies listed in the dependencies section.  
 2. "g++ -o YahooWeatherSearch main.cpp WeatherTree.cpp -lcurl -l json -std=c++11", this should generate a file called YahooWeatherSearch that you can run using "./YahooWeatherSearch locations.txt"
-# Open issues/bugs
-Haven't found any but please do report them if you do
