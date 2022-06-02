@@ -1,7 +1,7 @@
 #ifndef MOVIETREE_H
 #define MOVIETREE_H
 
-#include <json/json.h>
+#include <json-c/json.h>
 
 struct WeatherNode{
     std::string name;

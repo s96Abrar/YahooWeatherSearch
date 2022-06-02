@@ -2,7 +2,7 @@
 #include "WeatherTree.h"
 #include <fstream>
 #include <string>
-#include <json/json.h>
+#include <json-c/json.h>
 #include <stdlib.h>
 #include <vector>
 #include <string.h>
